@@ -1,0 +1,18 @@
+__version__: 1.2.1
+transform:
+  __class_fullname__: Compose
+  additional_targets: {}
+  bbox_params:
+    check_each_transform: true
+    format: pascal_voc
+    label_fields:
+    - class_labels
+    min_area: 0.0
+    min_visibility: 0.0
+  keypoint_params: null
+  p: 1.0
+  transforms:
+  - __class_fullname__: Rotate
+    always_apply: false
+    limit: 45
+    p: 0.5

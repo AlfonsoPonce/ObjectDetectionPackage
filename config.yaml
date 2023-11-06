@@ -1,0 +1,69 @@
+main:
+  #components_repository: "https://github.com/udacity/build-ml-pipeline-for-short-term-rental-prices#components"
+  # All the intermediate files will be copied to this directory at the end of the run.
+  # Set this to null if you are running in prod
+  project_name: ObjectDetectionSystem
+  experiment_name: development
+  steps: MODELING
+
+
+EDA:
+  DATASET_ANALYSIS:
+    images_dir: ./Data/FootballerDetection/raw_data/images
+    labels_dir: ./Data/FootballerDetection/raw_data/labels
+    plots_output_dir: ./generated_images
+    report_save_dir: ./report_output
+    artifact_name: EDA_REPORT.pdf
+    artifact_type: report
+    artifact_description: A_brief_summary_of_the_dataset
+
+PREPROCESSING:
+  class_list: goalkeeper,player,ball,referee
+
+  ANNOTATION_CONVERSOR:
+    perform: False
+    src_label_format: VOC
+    dst_label_format: COCO
+    input_label_dir: ./Data/FootballerDetection/raw_data/labels
+    output_label_dir: ./coco_labels
+    artifact_name: coco_labels
+    artifact_type: annotations_folder
+    artifact_description: COCO_Annotations_for_footballer_detection
+
+  AUGMENTATIONS:
+    perform: True
+    image_directory: ./Data/FootballerDetection/raw_data/images
+    labels_directory: ./Data/FootballerDetection/raw_data/labels
+    augmentations_file: RandomRain.yml
+    artifact_name: augmentations
+    artifact_type: augmentations_result
+    artifact_description: Augmentation_file_used_And_result
+
+MODELING:
+  dataset_format: VOC
+  class_list: goalkeeper,player,ball,referee
+  images_dir: ./Data/FootballerDetection/raw_data/images
+  labels_dir: ./Data/FootballerDetection/raw_data/labels
+  output_dir: ./model_output
+  batch_size: 1
+  train_split: 0.8
+  model: fasterrcnn_resnet50
+  train_config:
+    optimizer:
+      name: SGD
+      params:
+        lr: 1e-5
+    scheduler:
+      name: ExponentialLR
+      params:
+        gamma: 1e-1
+    epochs: 2
+  artifact_name: modeling
+  artifact_type: torch_model
+  artifact_description: Model_Produced
+
+
+
+
+
+

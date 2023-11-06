@@ -1,0 +1,106 @@
+name: DatasetAnalysis
+python_env: env\python_env.yaml
+
+entry_points:
+    main:
+        parameters:
+
+            annotation_conversion:
+                description: If True, annotation conversion will be done with specified options. Else, annotation conversion will not be done
+                type: str
+                required: True
+
+            class_list:
+                description: List of classes to detect. E.g. --class_list Class1,Class2,...,ClassN
+                type: str
+                required: True
+
+            src_label_format:
+                description: Source format of labels
+                type: str
+                required: True
+
+            dst_label_format:
+                description: Destination format of labels
+                type: str
+                required: True
+
+            input_label_dir:
+                description: Source annotation folder
+                type: str
+                required: True
+
+            annotation_conversor_output_label_dir:
+                description: Destination annotation folder
+                type: str
+                required: True
+
+            annotation_conversor_artifact_name:
+                description: Name of the artifact.
+                type: str
+                required: True
+
+            annotation_conversor_artifact_type:
+                description: Type of the artifact.
+                type: str
+                required: True
+
+            annotation_conversor_artifact_description:
+                description: A brief description of this artifact.
+                type: str
+                required: True
+
+
+
+            augmentations:
+                description: If True, augmentations will be done with specified options. Else, augmentations will not be done
+                type: str
+                required: True
+
+            image_directory:
+                description: Directory to fetch images.
+                type: str
+                required: True
+
+            labels_directory:
+                description: Directory to fetch labels.
+                type: str
+                required: True
+
+            augmentation_file:
+                description: YAML file with albumentations style
+                type: str
+                required: True
+
+            augmentations_artifact_name:
+                description: Name of the artifact.
+                type: str
+                required: True
+
+            augmentations_artifact_type:
+                description: Type of the artifact.
+                type: str
+                required: True
+
+            augmentations_artifact_description:
+                description: A brief description of this artifact.
+                type: str
+                required: True
+
+
+
+        command: "python main.py --annotation_conversion {annotation_conversion}
+                                --class_list {class_list} --src_label_format {src_label_format}
+                                --dst_label_format {dst_label_format} --input_label_dir {input_label_dir}
+                                --annotation_conversor_output_label_dir {annotation_conversor_output_label_dir}
+                                --annotation_conversor_artifact_name {annotation_conversor_artifact_name}
+                                --annotation_conversor_artifact_type {annotation_conversor_artifact_type}
+                                --annotation_conversor_artifact_description {annotation_conversor_artifact_description}
+                                --augmentations {augmentations}
+                                --image_directory {image_directory} --labels_directory {labels_directory}
+                                --augmentation_file {augmentation_file}
+                                --augmentations_artifact_name {augmentations_artifact_name}
+                                --augmentations_artifact_type {augmentations_artifact_type}
+                                --augmentations_artifact_description {augmentations_artifact_description}
+                                "
+

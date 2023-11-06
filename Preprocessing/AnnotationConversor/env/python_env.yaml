@@ -1,0 +1,14 @@
+# Python version required to run the project.
+python: "3.10"
+
+build_dependencies:
+  - pip
+
+# Dependencies required to run the project.
+dependencies:
+  - mlflow==2.7.1
+  - numpy==1.26.1
+  - Pillow==10.1.0
+  - tqdm==4.66.1
+  - seaborn==0.13.0
+  - matplotlib==3.8.0

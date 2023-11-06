@@ -1,0 +1,32 @@
+name: ObjectDetectionEDA
+python_env: env/python_env.yaml
+
+entry_points:
+    main:
+        parameters:
+            images_dir:
+                description: Image folder to analyse
+                type: str
+            labels_dir:
+                description: Label folder to analyse
+                type: str
+            plots_output_dir:
+                description: Directory to save generated images
+                type: str
+            report_save_dir:
+                description: Directory where report is going to be saved
+                type: str
+            artifact_name:
+                description: Name of the artifact
+                type: str
+            artifact_type:
+                description: Type of the artifact
+                type: str
+            artifact_description:
+                description: A brief description of this artifact
+                type: str
+
+        command: python main.py  --images_dir {images_dir}  --labels_dir {labels_dir}
+                                 --plots_output_dir {plots_output_dir} --report_save_dir {report_save_dir}
+                                 --artifact_name {artifact_name}  --artifact_type {artifact_type} --artifact_description {artifact_description}
+
