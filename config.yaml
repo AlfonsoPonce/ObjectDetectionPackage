@@ -4,12 +4,12 @@ main:
   # Set this to null if you are running in prod
   project_name: ObjectDetectionSystem
   experiment_name: development
-  steps: MODELING
+  steps: EDA
 
 
 EDA:
   DATASET_ANALYSIS:
-    images_dir: ./Data/FootballerDetection/raw_data/images
+    images_dir: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\images
     labels_dir: ./Data/FootballerDetection/raw_data/labels
     plots_output_dir: ./generated_images
     report_save_dir: ./report_output

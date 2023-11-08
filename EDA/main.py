@@ -1,38 +1,51 @@
-import mlflow
-from pathlib import Path
-import argparse
-
 from pathlib import Path
 from DatasetAnalysis.report_creation import Report
-from DatasetAnalysis.data_checks.utils import check_duplicated_images, get_images_shapes, check_label_extensions, check_images_extensions
+from DatasetAnalysis.data_checks.utils import check_duplicated_images, parallel_check_duplicated_images, get_images_shapes, check_label_extensions, check_images_extensions, check_corrupted_images
 from DatasetAnalysis.data_distributions.utils import number_of_images, number_of_labels, class_distribution, relative_object_size_distribution
 from DatasetAnalysis.data_distributions.plots import plot_histogram
 import sys
+from Logging.custom_formatter import CustomFormatter
 import logging
 import argparse
 import wandb
 
 def run(args):
-    logging.basicConfig(filename='log_file.log', encoding='utf-8', level=logging.DEBUG,
-                        format='%(asctime)s %(message)s', filemode='w')
-    logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+    # setting logging
+    logging.basicConfig(filename='EDA.log')
+    logging.root.setLevel(logging.INFO)
 
+    logger = logging.getLogger("EDA")
+    logger.setLevel(logging.INFO)
+
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.INFO)
+
+    ch.setFormatter(CustomFormatter())
+
+    logger.addHandler(ch)
+
+
+    # initiating wandb
     run = wandb.init(job_type="Generate_Report")
     run.config.update(args)
 
-
+    # setting directories
     images_output_dir = Path(args.plots_output_dir)
     save_dir = Path(args.report_save_dir)
     Images_dir = Path(args.images_dir)
     Labels_dir = Path(args.labels_dir)
 
-
+    logging.info("Checking if output directory for images exists, if not, it will be created...")
     if not images_output_dir.exists():
+        logging.info("Directory not found, creating it...")
         images_output_dir.mkdir(exist_ok=True)
+        logging.info("Directory created!")
 
-
+    logging.info("Checking if output directory for storing the report exists, if not, it will be created...")
     if not save_dir.exists():
+        logging.info("Directory not found, creating it...")
         save_dir.mkdir(exist_ok=True)
+        logging.info("Directory created!")
 
     logging.info("Creating document...")
     document = Report("Exploratory Data Analysis in Object Detection")
@@ -50,6 +63,8 @@ def run(args):
            "specific football elements such as referees, players, etc."
     document.add_section("INTRODUCTION", text)
     ######### INTRODUCTION #########
+
+
 
 
     ######### SHAPE OF IMAGES #########

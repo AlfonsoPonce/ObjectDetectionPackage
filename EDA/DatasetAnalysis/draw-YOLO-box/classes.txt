@@ -1,4 +1,0 @@
-SimulationObject
-Vehicle
-Pedestrian
-Animal

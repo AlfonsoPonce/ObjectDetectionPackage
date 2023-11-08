@@ -7,13 +7,16 @@ Date: 25/10/2023
 
 import xml.etree.ElementTree as ET
 from pathlib import Path
+import logging
 
 def get_pascal_class_distribution(labels_dir: Path) -> tuple:
     '''
     Computes the class distribution among PASCAL VOC format labels.
-    :param labels_dir (Path): Directory where labels are stored
-    :return (Tuple): First element is the distribution dictionary. Second element is a list with all class appearances.
+
+    :param labels_dir: Directory where labels are stored.
+    :return: First element is the distribution dictionary. Second element is a list with all class appearances.
     '''
+    assert labels_dir.exists(), logging.error(f"{labels_dir} not found")
 
     ocurrence = []
     class_distribution = {}
@@ -39,10 +42,12 @@ def get_pascal_size_distribution(labels_dir: Path) -> tuple:
     '''
     Computes the distribution of objects sizes in the PASCAL VOC dataset format. Besides, returns how many images contain
     small, medium and large objects.
-    :param label_dir (Path): Directory where labels are stored
-    :return (Tuple): First element is the object size distribution. Second element is the number of images with different
+
+    :param label_dir: Directory where labels are stored
+    :return: First element is the object size distribution. Second element is the number of images with different
                     object sizes
     '''
+    assert labels_dir.exists(), logging.error(f"{labels_dir} not found")
 
     object_size_distribution = {'small': 0, 'medium': 0, 'large': 0}
     size_objects_per_image_distribution = {'small': 0, 'medium': 0, 'large': 0}
