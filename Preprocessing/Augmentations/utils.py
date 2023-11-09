@@ -4,54 +4,21 @@ Module that implements auxiliary augmentation utils.
 Author: Alfonso Ponce Navarro
 Date: 05/11/2023
 '''
-import os
-import pathlib
+from pathlib import Path
 from xml.etree import ElementTree as et
-import albumentations as A
-
-
-def boxTypeDetection(Annot_Directory):
-    annot_list = os.listdir(Annot_Directory)
-    isYOLO = False
-    isPascal = False
-    isCOCO = False
-
-    for file in annot_list:
-        extension = file.split('.')[1]
-        if extension == 'txt':
-            isYOLO = isYOLO or True
-        elif extension == 'json':
-            isCOCO = isCOCO or True
-        elif extension == 'xml':
-            isPascal = isPascal or True
-
-    if isYOLO and not isCOCO and not isPascal:
-        return 'yolo'
-    elif isCOCO and not isYOLO and not isPascal:
-        return 'coco'
-    elif isPascal and not isYOLO and not isCOCO:
-        return 'pascal_voc'
-    else:
-        raise 'More than one file format in the folder'
-
-def getClassList(input):
-    string_list = input.split(',')
-    list = []
-    iterator = 1
-    for element in string_list:
-        if element == ' ':
-            return False, 'Class list can not have blank spaces'
-        if iterator % 2 == 0 and element != ',':
-            return False, 'Class list must be separated by commas'
-
-        list.append(element)
-    return True, list
-
-#def readYOLOBboxes(annot_file):
+import logging
 
 
 
-def readPascalBboxes(image, annot_file, classes):
+def read_pascal_bboxes(annot_file: Path, class_list: list) -> tuple:
+    '''
+    Function that reads pascal bboxes and returns them in a tuple
+
+    :param annot_file: label file.
+    :param class_list: list of classes to be detected.
+    :return: Tuple whose first element are the list of bboxes and the second element is the labels associated with them.
+    '''
+    assert annot_file.exists(), logging.error(f'{annot_file} not found')
 
     boxes = []
     labels = []
@@ -61,7 +28,7 @@ def readPascalBboxes(image, annot_file, classes):
     for member in root.findall('object'):
         # map the current object name to `classes` list to get...
         # ... the label index and append to `labels` list
-        labels.append(classes.index(member.find('name').text))
+        labels.append(class_list.index(member.find('name').text))
 
         # xmin = left corner x-coordinates
         xmin = int(member.find('bndbox').find('xmin').text)
@@ -76,7 +43,6 @@ def readPascalBboxes(image, annot_file, classes):
         boxes.append([xmin, ymin, xmax, ymax])
 
 
-    return boxes, labels
+    return (boxes, labels)
 
 
-#def readCocoBboxes(annot_file):

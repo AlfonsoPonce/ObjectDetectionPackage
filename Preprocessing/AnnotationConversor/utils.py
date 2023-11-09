@@ -4,9 +4,10 @@ Author: Alfonso Ponce Navarro
 Date: 31/10/2023
 '''
 
-def xml_to_yolo_bbox(bbox, w, h):
+def xml_to_yolo_bbox(bbox, w, h) -> list:
     '''
     Converts PASCAL_VOC Bboxes to YOLO ones.
+
     :param bbox: PASCAL BBox
     :param w: width of BBox, used to normalize
     :param h: height of BBox, used to normalize
@@ -19,9 +20,10 @@ def xml_to_yolo_bbox(bbox, w, h):
     height = (bbox[3] - bbox[1]) / h
     return [x_center, y_center, width, height]
 
-def yolo_to_xml_bbox(bbox, w, h):
+def yolo_to_xml_bbox(bbox, w, h) -> list:
     '''
     Converts YOLO Bboxes to PASCAL_VOC ones.
+
     :param bbox: YOLO BBox
     :param w: width of BBox
     :param h: height of BBox
@@ -36,3 +38,23 @@ def yolo_to_xml_bbox(bbox, w, h):
     ymax = int((bbox[1] * h) + h_half_len)
     return [xmin, ymin, xmax, ymax]
 
+## converts the normalized positions  into integer positions
+def unconvert(class_id, width, height, x, y, w, h) -> tuple:
+    '''
+    Converts the normalized positions into integer positions.
+
+    :param class_id:
+    :param width: width of the image
+    :param height: height of the image
+    :param x:
+    :param y:
+    :param w: width of bbox
+    :param h: height of bbox
+    return: Tuple of pascal voc bbox
+    '''
+    xmax = int((x * width) + (w * width) / 2.0)
+    xmin = int((x * width) - (w * width) / 2.0)
+    ymax = int((y * height) + (h * height) / 2.0)
+    ymin = int((y * height) - (h * height) / 2.0)
+    class_id = int(class_id)
+    return (class_id, xmin, xmax, ymin, ymax)

@@ -1,5 +1,5 @@
 import wandb
-from AnnotationConversor.conversors import voc_to_yolo, voc_to_coco
+from AnnotationConversor.conversors import voc_to_yolo, voc_to_coco, coco_to_voc
 import argparse
 import logging
 from Augmentations.augment import perform_augmentations
@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 
 def run(args):
-    logging.basicConfig(filename='log_file.log', encoding='utf-8', level=logging.DEBUG,
+    logging.basicConfig(filename='PREPROCESSING.log', encoding='utf-8', level=logging.DEBUG,
                         format='%(asctime)s %(message)s', filemode='w')
     logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
@@ -25,7 +25,8 @@ def run(args):
         # create the labels folder (output directory)
         if not Path.exists(Path(args.annotation_conversor_output_label_dir)):
             Path(args.annotation_conversor_output_label_dir).mkdir(exist_ok=True)
-        print(args.class_list.split(','))
+
+
         if args.src_label_format == 'VOC' and args.dst_label_format == 'YOLO':
             logging.info('Performing VOC =====> YOLO conversion')
             voc_to_yolo(args.class_list.split(','), Path(args.input_label_dir), Path(args.annotation_conversor_output_label_dir))
@@ -33,6 +34,11 @@ def run(args):
         elif args.src_label_format == 'VOC' and args.dst_label_format == 'COCO':
             logging.info('Performing VOC =====> COCO conversion')
             voc_to_coco(args.class_list.split(','), Path(args.input_label_dir), Path(args.annotation_conversor_output_label_dir))
+
+        elif args.src_label_format == 'COCO' and args.dst_label_format == 'VOC':
+            logging.info('Performing COCO =====> VOC conversion')
+            coco_to_voc(Path(args.input_label_dir), Path(args.image_directory), Path(args.annotation_conversor_output_label_dir), 'voc_dataset')
+
         logging.info('Conversion finished succesfully')
 
         artifact = wandb.Artifact(
@@ -44,10 +50,21 @@ def run(args):
         run.log_artifact(artifact)
 
     if args.augmentations.upper() == "TRUE":
+        run = wandb.init(job_type="Preprocessing_Augmentations")
+        run.config.update(args)
 
+        logging.info(f"Performing {Path(args.augmentation_file).stem} augmentations...")
         perform_augmentations(Path(args.image_directory), Path(args.label_directory), Path(args.augmentation_file),
                               args.class_list.split(','))
+        logging.info(f"Augmentations successfully finished.")
 
+        artifact = wandb.Artifact(
+            name=args.augmentations_artifact_name,
+            type=args.augmentations_artifact_type,
+            description=args.augmentations_artifact_description
+        )
+        artifact.add_file(str(args.augmentation_file))
+        run.log_artifact(artifact)
 
 
 if __name__ == '__main__':
@@ -65,6 +82,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--dst_label_format', type=str, help='Destination format of labels',
                        choices=['VOC', 'COCO', 'YOLO'],required=True)
+
 
     parser.add_argument('--input_label_dir', type=str, help='Source annotation folder', required=True)
 

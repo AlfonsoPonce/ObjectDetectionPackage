@@ -25,6 +25,7 @@ entry_points:
                 type: str
                 required: True
 
+
             input_label_dir:
                 description: Source annotation folder
                 type: str

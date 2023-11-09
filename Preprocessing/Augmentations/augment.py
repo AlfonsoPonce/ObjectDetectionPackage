@@ -5,28 +5,32 @@ Author: Alfonso Ponce Navarro
 Date: 05/11/2023
 '''
 
-from utils import readPascalBboxes
+from utils import read_pascal_bboxes
 import math
-import os
 import albumentations as A
 from PIL import Image
 from pathlib import Path
 from pascal_voc_writer import Writer
 from multiprocessing import Pool
 import multiprocessing
-import time
 import numpy as np
+import logging
 
 
-def perform_augmentations(image_directory: Path, labels_directory: Path, augmentations_file: Path, class_list: list):
+def perform_augmentations(image_directory: Path, labels_directory: Path, augmentations_file: Path, class_list: list) -> None:
     '''
     Function to do image augmentations using multiprocessing.
+
     :param image_directory: Directory to fetch images.
     :param labels_directory: Directory to fetch labels.
     :param augmentations_file: YAML file with albumentations style.
     :param class_list: list of classes
-    :return:
     '''
+    assert image_directory.exists(), logging.error(f'{image_directory} not found')
+    assert labels_directory.exists(), logging.error(f'{labels_directory} not found')
+    assert augmentations_file.exists(), logging.error(f'{augmentations_file} not found')
+
+
     Augmented_Image_Dir = image_directory.joinpath(augmentations_file.stem)
     Augmented_Labels_Dir = labels_directory.joinpath(augmentations_file.stem)
     if not Path.exists(Augmented_Image_Dir):
@@ -44,7 +48,7 @@ def perform_augmentations(image_directory: Path, labels_directory: Path, augment
     lim_inf = 0
     lim_sup = math.floor(len(list_dir) / num_cpus)
     batch = lim_sup
-    start = time.time()
+
     for i in range(num_cpus):
         pool.apply_async(compute_kernel, args=(image_directory, labels_directory, class_list, list_dir[lim_inf:lim_sup], transforms, Augmented_Image_Dir, Augmented_Labels_Dir))
         lim_inf = (lim_sup + 1)
@@ -53,18 +57,19 @@ def perform_augmentations(image_directory: Path, labels_directory: Path, augment
         else:
             lim_sup += batch
 
-        print(list_dir[lim_inf:lim_sup])
+
 
 
     pool.close()
     pool.join()
-    print(time.time()-start)
 
 
 
-def compute_kernel(image_directory: Path, labels_directory: Path, class_list: list, list_dir: list, transforms: object, Augmented_Image_Dir: Path, Augmented_Labels_Dir: Path):
+
+def compute_kernel(image_directory: Path, labels_directory: Path, class_list: list, list_dir: list, transforms: object, Augmented_Image_Dir: Path, Augmented_Labels_Dir: Path) -> None:
     '''
     Core function that performs image augmentations.
+
     :param image_directory: Directory to fetch images.
     :param labels_directory: Directory to fetch labels.
     :param class_list: list of classes
@@ -72,10 +77,9 @@ def compute_kernel(image_directory: Path, labels_directory: Path, class_list: li
     :param transforms: Albumentations object that performs augmentation
     :param Augmented_Image_Dir: Directory to store augmented images
     :param Augmented_Labels_Dir: Directory to store augmented labels.
-    :return:
     '''
     list_dir2 = [x.stem for x in list_dir if x.is_file()]
-    print(list_dir2)
+
     i = 0
     for image_file in list_dir:
 
@@ -86,7 +90,7 @@ def compute_kernel(image_directory: Path, labels_directory: Path, class_list: li
             if image is not None:
                 # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-                bboxes, labels = readPascalBboxes(image, label_file, class_list)
+                bboxes, labels = read_pascal_bboxes(image, label_file, class_list)
 
                 for x in range(len(labels)):
                     labels[x] = class_list[labels[x]]

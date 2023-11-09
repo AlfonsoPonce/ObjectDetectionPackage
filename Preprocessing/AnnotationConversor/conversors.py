@@ -7,18 +7,25 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 import glob
 import json
-from .utils import xml_to_yolo_bbox
+from .utils import xml_to_yolo_bbox, unconvert
 import xmltodict
+from xml.dom.minidom import parseString
+from lxml.etree import Element, SubElement, tostring
+import numpy as np
+from PIL import Image
+import logging
+from pylabel import importer
 
-def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path):
+def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path) -> None:
     '''
     Conversion from PASCAL_VOC annotations to YOLO annotations.
+
     :param class_list: list of classes.
     :param input_label_dir: Path to the directory containing the annotations.
     :param output_label_dir: Path to the output directory.
-    :return: None
     '''
-
+    assert input_label_dir.exists(), logging.error(f"{input_label_dir} not found")
+    assert output_label_dir.exists(), logging.error(f"{output_label_dir} not found")
 
     # identify all the xml files in the annotations folder (input directory)
     file_list = list(input_label_dir.glob('*.xml'))
@@ -62,14 +69,17 @@ def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path)
         f.write(json.dumps(class_list))
 
 
-def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path):
-    """
-    Conversion from PASCAL_VOC annotations to COCO annotations
-    :param class_list: list of classes
-    :param input_label_dir: Path to the directory containing the annotations
-    :param output_label_dir: Path to the output directory
-    :return: None
-    """
+def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path) -> None:
+    '''
+    Conversion from PASCAL_VOC annotations to COCO annotations.
+
+    :param class_list: list of classes.
+    :param input_label_dir: Path to the directory containing the annotations.
+    :param output_label_dir: Path to the output directory.
+    '''
+    assert input_label_dir.exists(), logging.error(f"{input_label_dir} not found")
+    assert output_label_dir.exists(), logging.error(f"{output_label_dir} not found")
+
     attrDict = dict()
     # images = dict()
     # images1 = list()
@@ -133,3 +143,110 @@ def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path)
     jsonString = json.dumps(attrDict)
     with open(str(output_label_dir.joinpath('annotations.json')), "w") as f:
         f.write(jsonString)
+
+def yolo_to_voc(input_images_dir: Path, input_label_dir: Path, output_label_dir: Path, class_list: list) -> None:
+    '''
+    Conversion from YOLO annotations to PASCAL VOC annotations.
+
+    :param input_images_dir: Folder where images are stored.
+    :param input_label_dir: Folder where input yolo labels are stored.
+    :param output_label_dir: Folder where ouput voc labels will be stored.
+    :param class_list: list of classes to be detected.
+    '''
+    assert input_images_dir.exists(), logging.error(f"{input_images_dir} not found")
+    assert input_label_dir.exists(), logging.error(f"{input_label_dir} not found")
+    assert output_label_dir.exists(), logging.error(f"{output_label_dir} not found")
+
+    yolo_labels_list = list(input_label_dir.glob('*.txt'))
+
+
+    ids = [file.stem for file in yolo_labels_list]
+
+
+
+
+    for image_file in input_images_dir.glob('*'):
+
+        img = Image.open(str(image_file))
+        height, width = img.height, img.width
+        channels = len(img.mode)
+
+        node_root = Element('annotation')
+        node_folder = SubElement(node_root, 'folder')
+        node_folder.text = 'VOC2007'
+
+        img_name = image_file.name
+        node_filename = SubElement(node_root, 'filename')
+        node_filename.text = img_name
+
+        node_source = SubElement(node_root, 'source')
+        node_database = SubElement(node_source, 'database')
+        node_database.text = 'Coco database'
+
+        node_size = SubElement(node_root, 'size')
+        node_width = SubElement(node_size, 'width')
+        node_width.text = str(width)
+
+        node_height = SubElement(node_size, 'height')
+        node_height.text = str(height)
+
+        node_depth = SubElement(node_size, 'depth')
+        node_depth.text = str(channels)
+
+        node_segmented = SubElement(node_root, 'segmented')
+        node_segmented.text = '0'
+
+        target = input_label_dir.joinpath(image_file.stem+'.txt')
+        if target.exists():
+            label_norm = np.loadtxt(target).reshape(-1, 5)
+
+            for idx_label in range(len(label_norm)):
+                labels_conv = label_norm[idx_label]
+                new_label = unconvert(labels_conv[0], width, height, labels_conv[1], labels_conv[2], labels_conv[3],
+                                      labels_conv[4])
+
+                node_object = SubElement(node_root, 'object')
+                node_name = SubElement(node_object, 'name')
+                node_name.text = class_list[new_label[0]]
+
+                node_pose = SubElement(node_object, 'pose')
+                node_pose.text = 'Unspecified'
+
+                node_truncated = SubElement(node_object, 'truncated')
+                node_truncated.text = '0'
+                node_difficult = SubElement(node_object, 'difficult')
+                node_difficult.text = '0'
+                node_bndbox = SubElement(node_object, 'bndbox')
+                node_xmin = SubElement(node_bndbox, 'xmin')
+                node_xmin.text = str(new_label[1])
+                node_ymin = SubElement(node_bndbox, 'ymin')
+                node_ymin.text = str(new_label[3])
+                node_xmax = SubElement(node_bndbox, 'xmax')
+                node_xmax.text = str(new_label[2])
+                node_ymax = SubElement(node_bndbox, 'ymax')
+                node_ymax.text = str(new_label[4])
+                xml = tostring(node_root, pretty_print=True)
+                dom = parseString(xml)
+        # print(xml)
+        f = open(str(output_label_dir.joinpath(image_file.stem+'.xml')), "wb")
+        # f = open(os.path.join(outpath, img_id), "w")
+        # os.remove(target)
+        f.write(xml)
+        f.close()
+
+
+def coco_to_voc(input_label_path: Path, img_path: Path, output_label_path: Path, dataset_name: str) -> None:
+    """
+    Conversion from COCO annotations to PASCAL VOC annotations.
+
+    :param annotatios_path: Path to the directory containing the annotations.
+    :param img_path: Path to the directory containing the images.
+    :param dst_path: Path were converted annotations will be stored.
+    :param dataset_name: Name for the dataset. It can be whatever.
+    """
+    assert img_path.exists(), logging.error(f"{img_path} not found")
+    assert input_label_path.exists(), logging.error(f"{input_label_path} not found")
+    assert output_label_path.exists(), logging.error(f"{output_label_path} not found")
+
+    dataset = importer.ImportCoco(path=str(input_label_path), path_to_images=str(img_path) , name=dataset_name)
+    dataset.export.ExportToVoc(output_path=str(output_label_path))
