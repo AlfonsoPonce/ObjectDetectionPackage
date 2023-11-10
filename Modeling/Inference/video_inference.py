@@ -15,9 +15,18 @@ import cv2
 import time
 from ..Training import custom_utils
 
-def local_video_inference(video_input:Path, output_path:Path, model, class_list: list, detection_threshold: float, device: str, resize:tuple =None):
+
+def local_video_inference(
+        video_input: Path,
+        output_path: Path,
+        model,
+        class_list: list,
+        detection_threshold: float,
+        device: str,
+        resize: tuple = None) -> None:
     '''
     Function that implements local video inference.
+
     :param video_input: Video path.
     :param output_path: directory where results will be output
     :param model: torch detection model
@@ -25,7 +34,6 @@ def local_video_inference(video_input:Path, output_path:Path, model, class_list:
     :param detection_threshold: threshold that sets minimum confidence to an object to be detected
     :param device: device where the model is set
     :param resize: tuple that represents image resize
-    :return:
     '''
     # Create inference result dir if not present.
     if not output_path.exists():
@@ -97,7 +105,8 @@ def local_video_inference(video_input:Path, output_path:Path, model, class_list:
                 boxes = boxes[scores >= detection_threshold].astype(np.int32)
                 draw_boxes = boxes.copy()
                 # get all the predicited class names
-                pred_classes = [class_list[i] for i in outputs[0]['labels'].cpu().numpy()]
+                pred_classes = [class_list[i]
+                                for i in outputs[0]['labels'].cpu().numpy()]
 
                 # draw the bounding boxes and write the class name on top of it
                 for j, box in enumerate(draw_boxes):
@@ -114,9 +123,9 @@ def local_video_inference(video_input:Path, output_path:Path, model, class_list:
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0),
                         2, lineType=cv2.LINE_AA)
 
-            #cv2.imshow('image', frame)
-            #frame_show = Image.fromarray(np.uint8(frame*255))
-            #frame_show.show()
+            # cv2.imshow('image', frame)
+            # frame_show = Image.fromarray(np.uint8(frame*255))
+            # frame_show.show()
             out.write(frame)
             # press `q` to exit
             # if cv2.waitKey(1) & 0xFF == ord('q'):

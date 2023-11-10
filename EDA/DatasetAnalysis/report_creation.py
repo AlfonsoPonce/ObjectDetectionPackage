@@ -10,8 +10,9 @@ from pylatex import Command, Document, Section, Subsection, Figure
 from pylatex.utils import NoEscape, italic
 from pathlib import Path
 
+
 class Report():
-    def __init__(self, title:str, author:str = None):
+    def __init__(self, title: str, author: str = None):
         '''
         Initialise report object with a document title and besides the author.
 
@@ -21,12 +22,11 @@ class Report():
         self.document = Document()
 
         self.document.preamble.append(Command("title", title))
-        if author != None:
-            self.document.preamble.append(Command("author", "Anonymous author"))
+        if author is not None:
+            self.document.preamble.append(
+                Command("author", "Anonymous author"))
         self.document.preamble.append(Command("date", NoEscape(r"\today")))
         self.document.append(NoEscape(r"\maketitle"))
-
-
 
     def add_section(self, title: str, text: str) -> None:
         '''
@@ -38,7 +38,6 @@ class Report():
         '''
         with self.document.create(Section(title)):
             self.document.append(text)
-
 
     def add_subsection(self, title: str, text: str) -> None:
         '''
@@ -59,7 +58,7 @@ class Report():
         :param image_filename: Name of the image. Must end with image extension.
         '''
         with self.document.create(Figure(position="htbp")) as plot:
-            #plot.add_plot(width=NoEscape(width))
+            # plot.add_plot(width=NoEscape(width))
             plot.add_image(image_filename, width=NoEscape(width))
             plot.add_caption(caption)
 

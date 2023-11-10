@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import logging
 
+
 def get_pascal_class_distribution(labels_dir: Path) -> tuple:
     '''
     Computes the class distribution among PASCAL VOC format labels.
@@ -16,7 +17,11 @@ def get_pascal_class_distribution(labels_dir: Path) -> tuple:
     :param labels_dir: Directory where labels are stored.
     :return: First element is the distribution dictionary. Second element is a list with all class appearances.
     '''
-    assert labels_dir.exists(), logging.error(f"{labels_dir} not found")
+    try:
+        assert labels_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{labels_dir} not found.")
+        raise err
 
     ocurrence = []
     class_distribution = {}
@@ -36,8 +41,6 @@ def get_pascal_class_distribution(labels_dir: Path) -> tuple:
     return class_distribution, ocurrence
 
 
-
-
 def get_pascal_size_distribution(labels_dir: Path) -> tuple:
     '''
     Computes the distribution of objects sizes in the PASCAL VOC dataset format. Besides, returns how many images contain
@@ -47,7 +50,11 @@ def get_pascal_size_distribution(labels_dir: Path) -> tuple:
     :return: First element is the object size distribution. Second element is the number of images with different
                     object sizes
     '''
-    assert labels_dir.exists(), logging.error(f"{labels_dir} not found")
+    try:
+        assert labels_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{labels_dir} not found.")
+        raise err
 
     object_size_distribution = {'small': 0, 'medium': 0, 'large': 0}
     size_objects_per_image_distribution = {'small': 0, 'medium': 0, 'large': 0}
@@ -60,7 +67,7 @@ def get_pascal_size_distribution(labels_dir: Path) -> tuple:
         image_has_large_object = False
         try:
             tree = ET.parse(file)
-        except:
+        except BaseException:
             xmlp = ET.XMLParser(encoding='utf-8')
             tree = ET.parse(file, parser=xmlp)
 
@@ -68,8 +75,10 @@ def get_pascal_size_distribution(labels_dir: Path) -> tuple:
 
         for obj in root.findall('object'):
             bbox = obj.find('bndbox')
-            xmin, ymin = int(bbox.find('xmin').text), int(bbox.find('ymin').text)
-            xmax, ymax = int(bbox.find('xmax').text), int(bbox.find('ymax').text)
+            xmin, ymin = int(bbox.find('xmin').text), int(
+                bbox.find('ymin').text)
+            xmax, ymax = int(bbox.find('xmax').text), int(
+                bbox.find('ymax').text)
 
             width = xmax - xmin
             height = ymax - ymin
@@ -88,7 +97,6 @@ def get_pascal_size_distribution(labels_dir: Path) -> tuple:
                 object_size_distribution['large'] += 1
                 object_size_occurences.append('large')
 
-
         if image_has_small_object:
             size_objects_per_image_distribution['small'] += 1
             size_objects_per_image_occurrences.append('small')
@@ -99,14 +107,10 @@ def get_pascal_size_distribution(labels_dir: Path) -> tuple:
             size_objects_per_image_distribution['large'] += 1
             size_objects_per_image_occurrences.append('large')
 
-
-
-
     return (object_size_distribution,
             object_size_occurences,
             size_objects_per_image_distribution,
             size_objects_per_image_occurrences)
-
 
 
 '''

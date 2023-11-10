@@ -16,7 +16,11 @@ from PIL import Image
 import logging
 from pylabel import importer
 
-def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path) -> None:
+
+def voc_to_yolo(
+        class_list: list,
+        input_label_dir: Path,
+        output_label_dir: Path) -> None:
     '''
     Conversion from PASCAL_VOC annotations to YOLO annotations.
 
@@ -24,8 +28,10 @@ def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path)
     :param input_label_dir: Path to the directory containing the annotations.
     :param output_label_dir: Path to the output directory.
     '''
-    assert input_label_dir.exists(), logging.error(f"{input_label_dir} not found")
-    assert output_label_dir.exists(), logging.error(f"{output_label_dir} not found")
+    assert input_label_dir.exists(), logging.error(
+        f"{input_label_dir} not found")
+    assert output_label_dir.exists(), logging.error(
+        f"{output_label_dir} not found")
 
     # identify all the xml files in the annotations folder (input directory)
     file_list = list(input_label_dir.glob('*.xml'))
@@ -39,7 +45,7 @@ def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path)
         # parse the content of the xml file
         try:
             tree = ET.parse(file)
-        except:
+        except BaseException:
             xmlp = ET.XMLParser(encoding='utf-8')
             tree = ET.parse(file, parser=xmlp)
         root = tree.getroot()
@@ -69,7 +75,10 @@ def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path)
         f.write(json.dumps(class_list))
 
 
-def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path) -> None:
+def voc_to_coco(
+        class_list: list,
+        input_label_dir: Path,
+        output_label_dir: Path) -> None:
     '''
     Conversion from PASCAL_VOC annotations to COCO annotations.
 
@@ -77,16 +86,19 @@ def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path)
     :param input_label_dir: Path to the directory containing the annotations.
     :param output_label_dir: Path to the output directory.
     '''
-    assert input_label_dir.exists(), logging.error(f"{input_label_dir} not found")
-    assert output_label_dir.exists(), logging.error(f"{output_label_dir} not found")
+    assert input_label_dir.exists(), logging.error(
+        f"{input_label_dir} not found")
+    assert output_label_dir.exists(), logging.error(
+        f"{output_label_dir} not found")
 
     attrDict = dict()
     # images = dict()
     # images1 = list()
     attrDict["categories"] = []
-    class_id=1
+    class_id = 1
     for category in class_list:
-        attrDict["categories"].append({"supercategory": "none", "id": class_id, "name": category})
+        attrDict["categories"].append(
+            {"supercategory": "none", "id": class_id, "name": category})
         class_id += 1
 
     images = []
@@ -101,13 +113,16 @@ def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path)
             doc = xmltodict.parse(xml_file.read())
 
         image = {
-                    "file_name": doc['annotation']['filename'],
-                    "height": int(doc['annotation']['size']['height']),
-                    "width": int(doc['annotation']['size']['width']),
-                    "id": image_id
-                }
+            "file_name": doc['annotation']['filename'],
+            "height": int(doc['annotation']['size']['height']),
+            "width": int(doc['annotation']['size']['width']),
+            "id": image_id
+        }
 
-        print("File Name: {} and image_id {}".format(annotation_path.name, image_id))
+        print(
+            "File Name: {} and image_id {}".format(
+                annotation_path.name,
+                image_id))
         images.append(image)
 
         if 'object' in doc['annotation']:
@@ -129,11 +144,13 @@ def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path)
                         annotation["ignore"] = 0
                         annotation["id"] = id1
                         annotation["segmentation"] = [
-                                    [x1, y1, x1, (y1 + y2), (x1 + x2), (y1 + y2), (x1 + x2), y1]]
+                            [x1, y1, x1, (y1 + y2), (x1 + x2), (y1 + y2), (x1 + x2), y1]]
                         id1 += 1
                         annotations.append(annotation)
         else:
-            print("File: {} doesn't have any object".format(annotation_path.name))
+            print(
+                "File: {} doesn't have any object".format(
+                    annotation_path.name))
 
     attrDict["images"] = images
     attrDict["annotations"] = annotations
@@ -144,7 +161,12 @@ def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path)
     with open(str(output_label_dir.joinpath('annotations.json')), "w") as f:
         f.write(jsonString)
 
-def yolo_to_voc(input_images_dir: Path, input_label_dir: Path, output_label_dir: Path, class_list: list) -> None:
+
+def yolo_to_voc(
+        input_images_dir: Path,
+        input_label_dir: Path,
+        output_label_dir: Path,
+        class_list: list) -> None:
     '''
     Conversion from YOLO annotations to PASCAL VOC annotations.
 
@@ -153,17 +175,16 @@ def yolo_to_voc(input_images_dir: Path, input_label_dir: Path, output_label_dir:
     :param output_label_dir: Folder where ouput voc labels will be stored.
     :param class_list: list of classes to be detected.
     '''
-    assert input_images_dir.exists(), logging.error(f"{input_images_dir} not found")
-    assert input_label_dir.exists(), logging.error(f"{input_label_dir} not found")
-    assert output_label_dir.exists(), logging.error(f"{output_label_dir} not found")
+    assert input_images_dir.exists(), logging.error(
+        f"{input_images_dir} not found")
+    assert input_label_dir.exists(), logging.error(
+        f"{input_label_dir} not found")
+    assert output_label_dir.exists(), logging.error(
+        f"{output_label_dir} not found")
 
     yolo_labels_list = list(input_label_dir.glob('*.txt'))
 
-
     ids = [file.stem for file in yolo_labels_list]
-
-
-
 
     for image_file in input_images_dir.glob('*'):
 
@@ -196,14 +217,20 @@ def yolo_to_voc(input_images_dir: Path, input_label_dir: Path, output_label_dir:
         node_segmented = SubElement(node_root, 'segmented')
         node_segmented.text = '0'
 
-        target = input_label_dir.joinpath(image_file.stem+'.txt')
+        target = input_label_dir.joinpath(image_file.stem + '.txt')
         if target.exists():
             label_norm = np.loadtxt(target).reshape(-1, 5)
 
             for idx_label in range(len(label_norm)):
                 labels_conv = label_norm[idx_label]
-                new_label = unconvert(labels_conv[0], width, height, labels_conv[1], labels_conv[2], labels_conv[3],
-                                      labels_conv[4])
+                new_label = unconvert(
+                    labels_conv[0],
+                    width,
+                    height,
+                    labels_conv[1],
+                    labels_conv[2],
+                    labels_conv[3],
+                    labels_conv[4])
 
                 node_object = SubElement(node_root, 'object')
                 node_name = SubElement(node_object, 'name')
@@ -228,14 +255,18 @@ def yolo_to_voc(input_images_dir: Path, input_label_dir: Path, output_label_dir:
                 xml = tostring(node_root, pretty_print=True)
                 dom = parseString(xml)
         # print(xml)
-        f = open(str(output_label_dir.joinpath(image_file.stem+'.xml')), "wb")
+        f = open(str(output_label_dir.joinpath(image_file.stem + '.xml')), "wb")
         # f = open(os.path.join(outpath, img_id), "w")
         # os.remove(target)
         f.write(xml)
         f.close()
 
 
-def coco_to_voc(input_label_path: Path, img_path: Path, output_label_path: Path, dataset_name: str) -> None:
+def coco_to_voc(
+        input_label_path: Path,
+        img_path: Path,
+        output_label_path: Path,
+        dataset_name: str) -> None:
     """
     Conversion from COCO annotations to PASCAL VOC annotations.
 
@@ -245,8 +276,13 @@ def coco_to_voc(input_label_path: Path, img_path: Path, output_label_path: Path,
     :param dataset_name: Name for the dataset. It can be whatever.
     """
     assert img_path.exists(), logging.error(f"{img_path} not found")
-    assert input_label_path.exists(), logging.error(f"{input_label_path} not found")
-    assert output_label_path.exists(), logging.error(f"{output_label_path} not found")
+    assert input_label_path.exists(), logging.error(
+        f"{input_label_path} not found")
+    assert output_label_path.exists(), logging.error(
+        f"{output_label_path} not found")
 
-    dataset = importer.ImportCoco(path=str(input_label_path), path_to_images=str(img_path) , name=dataset_name)
+    dataset = importer.ImportCoco(
+        path=str(input_label_path),
+        path_to_images=str(img_path),
+        name=dataset_name)
     dataset.export.ExportToVoc(output_path=str(output_label_path))

@@ -19,12 +19,14 @@ class PascalDataset(Dataset):
     '''
     Class that represents an object detection dataset with Pascal VOC annotation format.
     '''
+
     def __init__(
-            self, image_list:list, labels_list:list, class_list,
-            width:int =0, height:int =0,  transforms: Compose=None
+            self, image_list: list, labels_list: list, class_list,
+            width: int = 0, height: int = 0, transforms: Compose = None
     ):
         '''
-        Instantiate a Pascal VOC dataset
+        Instantiate a Pascal VOC dataset.
+
         :param image_list: list of images
         :param labels_list: list of labels
         :param class_list: list of classes,
@@ -48,16 +50,16 @@ class PascalDataset(Dataset):
 
         self.all_annot_paths.extend(labels_list)
 
-
-        self.all_images = [image_path.name for image_path in self.all_image_paths]
+        self.all_images = [
+            image_path.name for image_path in self.all_image_paths]
         self.all_images = sorted(self.all_images)
 
-
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple:
         '''
-        Function to return an object detection instance
-        :param idx: instance index
-        :return:
+        Function to return an object detection instance.
+
+        :param idx: instance index.
+        :return: Tuple which contains image and bboxes.
         '''
         # capture the image name and the full image path
         image_name = self.all_images[idx]
@@ -65,7 +67,10 @@ class PascalDataset(Dataset):
         image_path = self.images_path.joinpath(image_name)
 
         # read the image
-        image_resized = np.array(Image.open(str(image_path))).astype(np.float32)
+        image_resized = np.array(
+            Image.open(
+                str(image_path))).astype(
+            np.float32)
         if self.width != 0 and self.height != 0:
             image_resized = image_resized.resize((self.width, self.height))
 
@@ -84,7 +89,8 @@ class PascalDataset(Dataset):
         image_width = image_resized.shape[1]
         image_height = image_resized.shape[0]
 
-        # box coordinates for xml files are extracted and corrected for image size given
+        # box coordinates for xml files are extracted and corrected for image
+        # size given
         for member in root.findall('object'):
             # map the current object name to `classes` list to get...
             # ... the label index and append to `labels` list
@@ -102,19 +108,23 @@ class PascalDataset(Dataset):
             if self.width != 0 and self.height != 0:
                 # resize the bounding boxes according to the...
                 # ... desired `width`, `height`
-                xmin = (xmin/image_width)*self.width
-                xmax = (xmax/image_width)*self.width
-                ymin = (ymin/image_height)*self.height
-                ymax = (ymax/image_height)*self.height
+                xmin = (xmin / image_width) * self.width
+                xmax = (xmax / image_width) * self.width
+                ymin = (ymin / image_height) * self.height
+                ymax = (ymax / image_height) * self.height
 
-            #print(f'ANTES {xmax}---{xmin}' )
-            if xmax <= xmin: xmax += 0.1
-            if ymax <= ymin: ymin -= 0.1
-            if ymax > image_height: ymax = image_height - 1
-            if xmax > image_width: xmax = image_width - 1
-            #if xmin > 1.0: xmin = 1.0
-            #if ymin > 1.0: ymin = 1.0
-            #print(f'DESPUES {xmax}---{xmin}')
+            # print(f'ANTES {xmax}---{xmin}' )
+            if xmax <= xmin:
+                xmax += 0.1
+            if ymax <= ymin:
+                ymin -= 0.1
+            if ymax > image_height:
+                ymax = image_height - 1
+            if xmax > image_width:
+                xmax = image_width - 1
+            # if xmin > 1.0: xmin = 1.0
+            # if ymin > 1.0: ymin = 1.0
+            # print(f'DESPUES {xmax}---{xmin}')
             boxes.append([xmin, ymin, xmax, ymax])
 
         # bounding box to tensor
@@ -148,16 +158,15 @@ class PascalDataset(Dataset):
         return len(self.all_images)
 
 
-
-
-
 # execute datasets.py using Python command from Terminal...
 # ... to visualize sample images
 # USAGE: python datasets.py
 if __name__ == '__main__':
     # sanity check of the Dataset pipeline with sample visualization
-    images_list = list(Path('../../Data/FootballerDetection/raw_data/images').glob('*'))
-    labels_list = list(Path('../../Data/FootballerDetection/raw_data/labels').glob('*'))
+    images_list = list(
+        Path('../../Data/FootballerDetection/raw_data/images').glob('*'))
+    labels_list = list(
+        Path('../../Data/FootballerDetection/raw_data/labels').glob('*'))
     classes = ['player', 'ball', 'goalkeeper', 'referee']
     height = 0
     width = 0
@@ -167,22 +176,26 @@ if __name__ == '__main__':
     )
     print(f"Number of training images: {len(dataset)}")
 
-
     # function to visualize a single sample
+
     def visualize_sample(image, target):
         for box_num in range(len(target['boxes'])):
             box = target['boxes'][box_num]
             label = classes[target['labels'][box_num]]
             draw = ImageDraw.Draw(image)
-            draw.rectangle((int(box[0]), int(box[1]), int(box[2]), int(box[3])),
-                           outline=(0, 255, 0))
+            draw.rectangle(
+                (int(
+                    box[0]), int(
+                    box[1]), int(
+                    box[2]), int(
+                    box[3])), outline=(
+                        0, 255, 0))
 
-            draw.text((int(box[0]), int(box[1] - 5)),label)
+            draw.text((int(box[0]), int(box[1] - 5)), label)
         image.show()
         keyboard.wait('q')
-
 
     NUM_SAMPLES_TO_VISUALIZE = 5
     for i in range(NUM_SAMPLES_TO_VISUALIZE):
         image, target = dataset[i]
-        visualize_sample(Image.fromarray(np.uint8(image*255)), target)
+        visualize_sample(Image.fromarray(np.uint8(image * 255)), target)

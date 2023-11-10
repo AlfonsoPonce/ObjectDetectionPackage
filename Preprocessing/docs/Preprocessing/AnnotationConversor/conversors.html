@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>Preprocessing.AnnotationConversor.conversors API documentation</title>
+<meta name="description" content="This module allows the conversion among Object Detection annotations.
+Author: Alfonso Ponce Navarro
+Date: 31/10/2023" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>Preprocessing.AnnotationConversor.conversors</code></h1>
+</header>
+<section id="section-intro">
+<p>This module allows the conversion among Object Detection annotations.
+Author: Alfonso Ponce Navarro
+Date: 31/10/2023</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#39;&#39;&#39;
+This module allows the conversion among Object Detection annotations.
+Author: Alfonso Ponce Navarro
+Date: 31/10/2023
+&#39;&#39;&#39;
+from pathlib import Path
+import xml.etree.ElementTree as ET
+import glob
+import json
+from .utils import xml_to_yolo_bbox, unconvert
+import xmltodict
+from xml.dom.minidom import parseString
+from lxml.etree import Element, SubElement, tostring
+import numpy as np
+from PIL import Image
+import logging
+from pylabel import importer
+
+def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path) -&gt; None:
+    &#39;&#39;&#39;
+    Conversion from PASCAL_VOC annotations to YOLO annotations.
+
+    :param class_list: list of classes.
+    :param input_label_dir: Path to the directory containing the annotations.
+    :param output_label_dir: Path to the output directory.
+    &#39;&#39;&#39;
+    assert input_label_dir.exists(), logging.error(f&#34;{input_label_dir} not found&#34;)
+    assert output_label_dir.exists(), logging.error(f&#34;{output_label_dir} not found&#34;)
+
+    # identify all the xml files in the annotations folder (input directory)
+    file_list = list(input_label_dir.glob(&#39;*.xml&#39;))
+
+    # loop through each
+    for file in file_list:
+        filename = file.stem
+
+        result = []
+
+        # parse the content of the xml file
+        try:
+            tree = ET.parse(file)
+        except:
+            xmlp = ET.XMLParser(encoding=&#39;utf-8&#39;)
+            tree = ET.parse(file, parser=xmlp)
+        root = tree.getroot()
+        width = int(root.find(&#34;size&#34;).find(&#34;width&#34;).text)
+        height = int(root.find(&#34;size&#34;).find(&#34;height&#34;).text)
+
+        for obj in root.findall(&#39;object&#39;):
+            label = obj.find(&#34;name&#34;).text
+            # check for new classes and append to list
+            if label not in class_list:
+                class_list.append(label)
+            index = class_list.index(label)
+            pil_bbox = [int(x.text) for x in obj.find(&#34;bndbox&#34;)]
+
+            yolo_bbox = xml_to_yolo_bbox(pil_bbox, width, height)
+
+            bbox_string = &#34; &#34;.join([str(x) for x in yolo_bbox])
+            result.append(f&#34;{index} {bbox_string}&#34;)
+
+        if result:
+            # generate a YOLO format text file for each xml file
+            with open(output_label_dir.joinpath(f&#34;{filename}.txt&#34;), &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(&#34;\n&#34;.join(result))
+
+    # generate the classes file as reference
+    with open(&#39;classes.txt&#39;, &#39;w&#39;, encoding=&#39;utf8&#39;) as f:
+        f.write(json.dumps(class_list))
+
+
+def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path) -&gt; None:
+    &#39;&#39;&#39;
+    Conversion from PASCAL_VOC annotations to COCO annotations.
+
+    :param class_list: list of classes.
+    :param input_label_dir: Path to the directory containing the annotations.
+    :param output_label_dir: Path to the output directory.
+    &#39;&#39;&#39;
+    assert input_label_dir.exists(), logging.error(f&#34;{input_label_dir} not found&#34;)
+    assert output_label_dir.exists(), logging.error(f&#34;{output_label_dir} not found&#34;)
+
+    attrDict = dict()
+    # images = dict()
+    # images1 = list()
+    attrDict[&#34;categories&#34;] = []
+    class_id=1
+    for category in class_list:
+        attrDict[&#34;categories&#34;].append({&#34;supercategory&#34;: &#34;none&#34;, &#34;id&#34;: class_id, &#34;name&#34;: category})
+        class_id += 1
+
+    images = []
+    annotations = []
+    image_id = 0
+
+    for annotation_path in input_label_dir.glob(&#39;*.xml&#39;):
+
+        image_id += 1
+
+        with annotation_path.open() as xml_file:
+            doc = xmltodict.parse(xml_file.read())
+
+        image = {
+                    &#34;file_name&#34;: doc[&#39;annotation&#39;][&#39;filename&#39;],
+                    &#34;height&#34;: int(doc[&#39;annotation&#39;][&#39;size&#39;][&#39;height&#39;]),
+                    &#34;width&#34;: int(doc[&#39;annotation&#39;][&#39;size&#39;][&#39;width&#39;]),
+                    &#34;id&#34;: image_id
+                }
+
+        print(&#34;File Name: {} and image_id {}&#34;.format(annotation_path.name, image_id))
+        images.append(image)
+
+        if &#39;object&#39; in doc[&#39;annotation&#39;]:
+            id1 = 1
+            for obj in doc[&#39;annotation&#39;][&#39;object&#39;]:
+                for value in attrDict[&#34;categories&#34;]:
+                    annotation = {}
+
+                    if str(obj[&#39;name&#39;]) == value[&#34;name&#34;]:
+                        annotation[&#34;iscrowd&#34;] = 0
+                        annotation[&#34;image_id&#34;] = image_id
+                        x1 = int(obj[&#34;bndbox&#34;][&#34;xmin&#34;]) - 1
+                        y1 = int(obj[&#34;bndbox&#34;][&#34;ymin&#34;]) - 1
+                        x2 = int(obj[&#34;bndbox&#34;][&#34;xmax&#34;]) - x1
+                        y2 = int(obj[&#34;bndbox&#34;][&#34;ymax&#34;]) - y1
+                        annotation[&#34;bbox&#34;] = [x1, y1, x2, y2]
+                        annotation[&#34;area&#34;] = float(x2 * y2)
+                        annotation[&#34;category_id&#34;] = value[&#34;id&#34;]
+                        annotation[&#34;ignore&#34;] = 0
+                        annotation[&#34;id&#34;] = id1
+                        annotation[&#34;segmentation&#34;] = [
+                                    [x1, y1, x1, (y1 + y2), (x1 + x2), (y1 + y2), (x1 + x2), y1]]
+                        id1 += 1
+                        annotations.append(annotation)
+        else:
+            print(&#34;File: {} doesn&#39;t have any object&#34;.format(annotation_path.name))
+
+    attrDict[&#34;images&#34;] = images
+    attrDict[&#34;annotations&#34;] = annotations
+    attrDict[&#34;type&#34;] = &#34;instances&#34;
+
+    # print attrDict
+    jsonString = json.dumps(attrDict)
+    with open(str(output_label_dir.joinpath(&#39;annotations.json&#39;)), &#34;w&#34;) as f:
+        f.write(jsonString)
+
+def yolo_to_voc(input_images_dir: Path, input_label_dir: Path, output_label_dir: Path, class_list: list) -&gt; None:
+    &#39;&#39;&#39;
+    Conversion from YOLO annotations to PASCAL VOC annotations.
+
+    :param input_images_dir: Folder where images are stored.
+    :param input_label_dir: Folder where input yolo labels are stored.
+    :param output_label_dir: Folder where ouput voc labels will be stored.
+    :param class_list: list of classes to be detected.
+    &#39;&#39;&#39;
+    assert input_images_dir.exists(), logging.error(f&#34;{input_images_dir} not found&#34;)
+    assert input_label_dir.exists(), logging.error(f&#34;{input_label_dir} not found&#34;)
+    assert output_label_dir.exists(), logging.error(f&#34;{output_label_dir} not found&#34;)
+
+    yolo_labels_list = list(input_label_dir.glob(&#39;*.txt&#39;))
+
+
+    ids = [file.stem for file in yolo_labels_list]
+
+
+
+
+    for image_file in input_images_dir.glob(&#39;*&#39;):
+
+        img = Image.open(str(image_file))
+        height, width = img.height, img.width
+        channels = len(img.mode)
+
+        node_root = Element(&#39;annotation&#39;)
+        node_folder = SubElement(node_root, &#39;folder&#39;)
+        node_folder.text = &#39;VOC2007&#39;
+
+        img_name = image_file.name
+        node_filename = SubElement(node_root, &#39;filename&#39;)
+        node_filename.text = img_name
+
+        node_source = SubElement(node_root, &#39;source&#39;)
+        node_database = SubElement(node_source, &#39;database&#39;)
+        node_database.text = &#39;Coco database&#39;
+
+        node_size = SubElement(node_root, &#39;size&#39;)
+        node_width = SubElement(node_size, &#39;width&#39;)
+        node_width.text = str(width)
+
+        node_height = SubElement(node_size, &#39;height&#39;)
+        node_height.text = str(height)
+
+        node_depth = SubElement(node_size, &#39;depth&#39;)
+        node_depth.text = str(channels)
+
+        node_segmented = SubElement(node_root, &#39;segmented&#39;)
+        node_segmented.text = &#39;0&#39;
+
+        target = input_label_dir.joinpath(image_file.stem+&#39;.txt&#39;)
+        if target.exists():
+            label_norm = np.loadtxt(target).reshape(-1, 5)
+
+            for idx_label in range(len(label_norm)):
+                labels_conv = label_norm[idx_label]
+                new_label = unconvert(labels_conv[0], width, height, labels_conv[1], labels_conv[2], labels_conv[3],
+                                      labels_conv[4])
+
+                node_object = SubElement(node_root, &#39;object&#39;)
+                node_name = SubElement(node_object, &#39;name&#39;)
+                node_name.text = class_list[new_label[0]]
+
+                node_pose = SubElement(node_object, &#39;pose&#39;)
+                node_pose.text = &#39;Unspecified&#39;
+
+                node_truncated = SubElement(node_object, &#39;truncated&#39;)
+                node_truncated.text = &#39;0&#39;
+                node_difficult = SubElement(node_object, &#39;difficult&#39;)
+                node_difficult.text = &#39;0&#39;
+                node_bndbox = SubElement(node_object, &#39;bndbox&#39;)
+                node_xmin = SubElement(node_bndbox, &#39;xmin&#39;)
+                node_xmin.text = str(new_label[1])
+                node_ymin = SubElement(node_bndbox, &#39;ymin&#39;)
+                node_ymin.text = str(new_label[3])
+                node_xmax = SubElement(node_bndbox, &#39;xmax&#39;)
+                node_xmax.text = str(new_label[2])
+                node_ymax = SubElement(node_bndbox, &#39;ymax&#39;)
+                node_ymax.text = str(new_label[4])
+                xml = tostring(node_root, pretty_print=True)
+                dom = parseString(xml)
+        # print(xml)
+        f = open(str(output_label_dir.joinpath(image_file.stem+&#39;.xml&#39;)), &#34;wb&#34;)
+        # f = open(os.path.join(outpath, img_id), &#34;w&#34;)
+        # os.remove(target)
+        f.write(xml)
+        f.close()
+
+
+def coco_to_voc(input_label_path: Path, img_path: Path, output_label_path: Path, dataset_name: str) -&gt; None:
+    &#34;&#34;&#34;
+    Conversion from COCO annotations to PASCAL VOC annotations.
+
+    :param annotatios_path: Path to the directory containing the annotations.
+    :param img_path: Path to the directory containing the images.
+    :param dst_path: Path were converted annotations will be stored.
+    :param dataset_name: Name for the dataset. It can be whatever.
+    &#34;&#34;&#34;
+    assert img_path.exists(), logging.error(f&#34;{img_path} not found&#34;)
+    assert input_label_path.exists(), logging.error(f&#34;{input_label_path} not found&#34;)
+    assert output_label_path.exists(), logging.error(f&#34;{output_label_path} not found&#34;)
+
+    dataset = importer.ImportCoco(path=str(input_label_path), path_to_images=str(img_path) , name=dataset_name)
+    dataset.export.ExportToVoc(output_path=str(output_label_path))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="Preprocessing.AnnotationConversor.conversors.coco_to_voc"><code class="name flex">
+<span>def <span class="ident">coco_to_voc</span></span>(<span>input_label_path: pathlib.Path, img_path: pathlib.Path, output_label_path: pathlib.Path, dataset_name: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Conversion from COCO annotations to PASCAL VOC annotations.</p>
+<p>:param annotatios_path: Path to the directory containing the annotations.
+:param img_path: Path to the directory containing the images.
+:param dst_path: Path were converted annotations will be stored.
+:param dataset_name: Name for the dataset. It can be whatever.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def coco_to_voc(input_label_path: Path, img_path: Path, output_label_path: Path, dataset_name: str) -&gt; None:
+    &#34;&#34;&#34;
+    Conversion from COCO annotations to PASCAL VOC annotations.
+
+    :param annotatios_path: Path to the directory containing the annotations.
+    :param img_path: Path to the directory containing the images.
+    :param dst_path: Path were converted annotations will be stored.
+    :param dataset_name: Name for the dataset. It can be whatever.
+    &#34;&#34;&#34;
+    assert img_path.exists(), logging.error(f&#34;{img_path} not found&#34;)
+    assert input_label_path.exists(), logging.error(f&#34;{input_label_path} not found&#34;)
+    assert output_label_path.exists(), logging.error(f&#34;{output_label_path} not found&#34;)
+
+    dataset = importer.ImportCoco(path=str(input_label_path), path_to_images=str(img_path) , name=dataset_name)
+    dataset.export.ExportToVoc(output_path=str(output_label_path))</code></pre>
+</details>
+</dd>
+<dt id="Preprocessing.AnnotationConversor.conversors.voc_to_coco"><code class="name flex">
+<span>def <span class="ident">voc_to_coco</span></span>(<span>class_list: list, input_label_dir: pathlib.Path, output_label_dir: pathlib.Path) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Conversion from PASCAL_VOC annotations to COCO annotations.</p>
+<p>:param class_list: list of classes.
+:param input_label_dir: Path to the directory containing the annotations.
+:param output_label_dir: Path to the output directory.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def voc_to_coco(class_list: list, input_label_dir: Path, output_label_dir: Path) -&gt; None:
+    &#39;&#39;&#39;
+    Conversion from PASCAL_VOC annotations to COCO annotations.
+
+    :param class_list: list of classes.
+    :param input_label_dir: Path to the directory containing the annotations.
+    :param output_label_dir: Path to the output directory.
+    &#39;&#39;&#39;
+    assert input_label_dir.exists(), logging.error(f&#34;{input_label_dir} not found&#34;)
+    assert output_label_dir.exists(), logging.error(f&#34;{output_label_dir} not found&#34;)
+
+    attrDict = dict()
+    # images = dict()
+    # images1 = list()
+    attrDict[&#34;categories&#34;] = []
+    class_id=1
+    for category in class_list:
+        attrDict[&#34;categories&#34;].append({&#34;supercategory&#34;: &#34;none&#34;, &#34;id&#34;: class_id, &#34;name&#34;: category})
+        class_id += 1
+
+    images = []
+    annotations = []
+    image_id = 0
+
+    for annotation_path in input_label_dir.glob(&#39;*.xml&#39;):
+
+        image_id += 1
+
+        with annotation_path.open() as xml_file:
+            doc = xmltodict.parse(xml_file.read())
+
+        image = {
+                    &#34;file_name&#34;: doc[&#39;annotation&#39;][&#39;filename&#39;],
+                    &#34;height&#34;: int(doc[&#39;annotation&#39;][&#39;size&#39;][&#39;height&#39;]),
+                    &#34;width&#34;: int(doc[&#39;annotation&#39;][&#39;size&#39;][&#39;width&#39;]),
+                    &#34;id&#34;: image_id
+                }
+
+        print(&#34;File Name: {} and image_id {}&#34;.format(annotation_path.name, image_id))
+        images.append(image)
+
+        if &#39;object&#39; in doc[&#39;annotation&#39;]:
+            id1 = 1
+            for obj in doc[&#39;annotation&#39;][&#39;object&#39;]:
+                for value in attrDict[&#34;categories&#34;]:
+                    annotation = {}
+
+                    if str(obj[&#39;name&#39;]) == value[&#34;name&#34;]:
+                        annotation[&#34;iscrowd&#34;] = 0
+                        annotation[&#34;image_id&#34;] = image_id
+                        x1 = int(obj[&#34;bndbox&#34;][&#34;xmin&#34;]) - 1
+                        y1 = int(obj[&#34;bndbox&#34;][&#34;ymin&#34;]) - 1
+                        x2 = int(obj[&#34;bndbox&#34;][&#34;xmax&#34;]) - x1
+                        y2 = int(obj[&#34;bndbox&#34;][&#34;ymax&#34;]) - y1
+                        annotation[&#34;bbox&#34;] = [x1, y1, x2, y2]
+                        annotation[&#34;area&#34;] = float(x2 * y2)
+                        annotation[&#34;category_id&#34;] = value[&#34;id&#34;]
+                        annotation[&#34;ignore&#34;] = 0
+                        annotation[&#34;id&#34;] = id1
+                        annotation[&#34;segmentation&#34;] = [
+                                    [x1, y1, x1, (y1 + y2), (x1 + x2), (y1 + y2), (x1 + x2), y1]]
+                        id1 += 1
+                        annotations.append(annotation)
+        else:
+            print(&#34;File: {} doesn&#39;t have any object&#34;.format(annotation_path.name))
+
+    attrDict[&#34;images&#34;] = images
+    attrDict[&#34;annotations&#34;] = annotations
+    attrDict[&#34;type&#34;] = &#34;instances&#34;
+
+    # print attrDict
+    jsonString = json.dumps(attrDict)
+    with open(str(output_label_dir.joinpath(&#39;annotations.json&#39;)), &#34;w&#34;) as f:
+        f.write(jsonString)</code></pre>
+</details>
+</dd>
+<dt id="Preprocessing.AnnotationConversor.conversors.voc_to_yolo"><code class="name flex">
+<span>def <span class="ident">voc_to_yolo</span></span>(<span>class_list: list, input_label_dir: pathlib.Path, output_label_dir: pathlib.Path) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Conversion from PASCAL_VOC annotations to YOLO annotations.</p>
+<p>:param class_list: list of classes.
+:param input_label_dir: Path to the directory containing the annotations.
+:param output_label_dir: Path to the output directory.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def voc_to_yolo(class_list: list, input_label_dir: Path, output_label_dir: Path) -&gt; None:
+    &#39;&#39;&#39;
+    Conversion from PASCAL_VOC annotations to YOLO annotations.
+
+    :param class_list: list of classes.
+    :param input_label_dir: Path to the directory containing the annotations.
+    :param output_label_dir: Path to the output directory.
+    &#39;&#39;&#39;
+    assert input_label_dir.exists(), logging.error(f&#34;{input_label_dir} not found&#34;)
+    assert output_label_dir.exists(), logging.error(f&#34;{output_label_dir} not found&#34;)
+
+    # identify all the xml files in the annotations folder (input directory)
+    file_list = list(input_label_dir.glob(&#39;*.xml&#39;))
+
+    # loop through each
+    for file in file_list:
+        filename = file.stem
+
+        result = []
+
+        # parse the content of the xml file
+        try:
+            tree = ET.parse(file)
+        except:
+            xmlp = ET.XMLParser(encoding=&#39;utf-8&#39;)
+            tree = ET.parse(file, parser=xmlp)
+        root = tree.getroot()
+        width = int(root.find(&#34;size&#34;).find(&#34;width&#34;).text)
+        height = int(root.find(&#34;size&#34;).find(&#34;height&#34;).text)
+
+        for obj in root.findall(&#39;object&#39;):
+            label = obj.find(&#34;name&#34;).text
+            # check for new classes and append to list
+            if label not in class_list:
+                class_list.append(label)
+            index = class_list.index(label)
+            pil_bbox = [int(x.text) for x in obj.find(&#34;bndbox&#34;)]
+
+            yolo_bbox = xml_to_yolo_bbox(pil_bbox, width, height)
+
+            bbox_string = &#34; &#34;.join([str(x) for x in yolo_bbox])
+            result.append(f&#34;{index} {bbox_string}&#34;)
+
+        if result:
+            # generate a YOLO format text file for each xml file
+            with open(output_label_dir.joinpath(f&#34;{filename}.txt&#34;), &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
+                f.write(&#34;\n&#34;.join(result))
+
+    # generate the classes file as reference
+    with open(&#39;classes.txt&#39;, &#39;w&#39;, encoding=&#39;utf8&#39;) as f:
+        f.write(json.dumps(class_list))</code></pre>
+</details>
+</dd>
+<dt id="Preprocessing.AnnotationConversor.conversors.yolo_to_voc"><code class="name flex">
+<span>def <span class="ident">yolo_to_voc</span></span>(<span>input_images_dir: pathlib.Path, input_label_dir: pathlib.Path, output_label_dir: pathlib.Path, class_list: list) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Conversion from YOLO annotations to PASCAL VOC annotations.</p>
+<p>:param input_images_dir: Folder where images are stored.
+:param input_label_dir: Folder where input yolo labels are stored.
+:param output_label_dir: Folder where ouput voc labels will be stored.
+:param class_list: list of classes to be detected.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def yolo_to_voc(input_images_dir: Path, input_label_dir: Path, output_label_dir: Path, class_list: list) -&gt; None:
+    &#39;&#39;&#39;
+    Conversion from YOLO annotations to PASCAL VOC annotations.
+
+    :param input_images_dir: Folder where images are stored.
+    :param input_label_dir: Folder where input yolo labels are stored.
+    :param output_label_dir: Folder where ouput voc labels will be stored.
+    :param class_list: list of classes to be detected.
+    &#39;&#39;&#39;
+    assert input_images_dir.exists(), logging.error(f&#34;{input_images_dir} not found&#34;)
+    assert input_label_dir.exists(), logging.error(f&#34;{input_label_dir} not found&#34;)
+    assert output_label_dir.exists(), logging.error(f&#34;{output_label_dir} not found&#34;)
+
+    yolo_labels_list = list(input_label_dir.glob(&#39;*.txt&#39;))
+
+
+    ids = [file.stem for file in yolo_labels_list]
+
+
+
+
+    for image_file in input_images_dir.glob(&#39;*&#39;):
+
+        img = Image.open(str(image_file))
+        height, width = img.height, img.width
+        channels = len(img.mode)
+
+        node_root = Element(&#39;annotation&#39;)
+        node_folder = SubElement(node_root, &#39;folder&#39;)
+        node_folder.text = &#39;VOC2007&#39;
+
+        img_name = image_file.name
+        node_filename = SubElement(node_root, &#39;filename&#39;)
+        node_filename.text = img_name
+
+        node_source = SubElement(node_root, &#39;source&#39;)
+        node_database = SubElement(node_source, &#39;database&#39;)
+        node_database.text = &#39;Coco database&#39;
+
+        node_size = SubElement(node_root, &#39;size&#39;)
+        node_width = SubElement(node_size, &#39;width&#39;)
+        node_width.text = str(width)
+
+        node_height = SubElement(node_size, &#39;height&#39;)
+        node_height.text = str(height)
+
+        node_depth = SubElement(node_size, &#39;depth&#39;)
+        node_depth.text = str(channels)
+
+        node_segmented = SubElement(node_root, &#39;segmented&#39;)
+        node_segmented.text = &#39;0&#39;
+
+        target = input_label_dir.joinpath(image_file.stem+&#39;.txt&#39;)
+        if target.exists():
+            label_norm = np.loadtxt(target).reshape(-1, 5)
+
+            for idx_label in range(len(label_norm)):
+                labels_conv = label_norm[idx_label]
+                new_label = unconvert(labels_conv[0], width, height, labels_conv[1], labels_conv[2], labels_conv[3],
+                                      labels_conv[4])
+
+                node_object = SubElement(node_root, &#39;object&#39;)
+                node_name = SubElement(node_object, &#39;name&#39;)
+                node_name.text = class_list[new_label[0]]
+
+                node_pose = SubElement(node_object, &#39;pose&#39;)
+                node_pose.text = &#39;Unspecified&#39;
+
+                node_truncated = SubElement(node_object, &#39;truncated&#39;)
+                node_truncated.text = &#39;0&#39;
+                node_difficult = SubElement(node_object, &#39;difficult&#39;)
+                node_difficult.text = &#39;0&#39;
+                node_bndbox = SubElement(node_object, &#39;bndbox&#39;)
+                node_xmin = SubElement(node_bndbox, &#39;xmin&#39;)
+                node_xmin.text = str(new_label[1])
+                node_ymin = SubElement(node_bndbox, &#39;ymin&#39;)
+                node_ymin.text = str(new_label[3])
+                node_xmax = SubElement(node_bndbox, &#39;xmax&#39;)
+                node_xmax.text = str(new_label[2])
+                node_ymax = SubElement(node_bndbox, &#39;ymax&#39;)
+                node_ymax.text = str(new_label[4])
+                xml = tostring(node_root, pretty_print=True)
+                dom = parseString(xml)
+        # print(xml)
+        f = open(str(output_label_dir.joinpath(image_file.stem+&#39;.xml&#39;)), &#34;wb&#34;)
+        # f = open(os.path.join(outpath, img_id), &#34;w&#34;)
+        # os.remove(target)
+        f.write(xml)
+        f.close()</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="Preprocessing.AnnotationConversor" href="index.html">Preprocessing.AnnotationConversor</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="Preprocessing.AnnotationConversor.conversors.coco_to_voc" href="#Preprocessing.AnnotationConversor.conversors.coco_to_voc">coco_to_voc</a></code></li>
+<li><code><a title="Preprocessing.AnnotationConversor.conversors.voc_to_coco" href="#Preprocessing.AnnotationConversor.conversors.voc_to_coco">voc_to_coco</a></code></li>
+<li><code><a title="Preprocessing.AnnotationConversor.conversors.voc_to_yolo" href="#Preprocessing.AnnotationConversor.conversors.voc_to_yolo">voc_to_yolo</a></code></li>
+<li><code><a title="Preprocessing.AnnotationConversor.conversors.yolo_to_voc" href="#Preprocessing.AnnotationConversor.conversors.yolo_to_voc">yolo_to_voc</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

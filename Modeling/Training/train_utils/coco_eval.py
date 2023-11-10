@@ -20,9 +20,11 @@ class CocoEvaluator:
     '''
     Class that implements coco evaluator.
     '''
+
     def __init__(self, coco_gt, iou_types):
         '''
         Instantiates coco evaluator object.
+
         :param coco_gt: Coco ground truth annotations
         :param iou_types: Type of iou to be evaluated
         '''
@@ -41,6 +43,7 @@ class CocoEvaluator:
     def update(self, predictions):
         '''
         Function that updates new predictions
+
         :param predictions: labels prediction
         :return:
         '''
@@ -50,7 +53,8 @@ class CocoEvaluator:
         for iou_type in self.iou_types:
             results = self.prepare(predictions, iou_type)
             with redirect_stdout(io.StringIO()):
-                coco_dt = COCO.loadRes(self.coco_gt, results) if results else COCO()
+                coco_dt = COCO.loadRes(
+                    self.coco_gt, results) if results else COCO()
             coco_eval = self.coco_eval[iou_type]
 
             coco_eval.cocoDt = coco_dt
@@ -62,11 +66,16 @@ class CocoEvaluator:
     def synchronize_between_processes(self):
         '''
         Function that synchronize processes
+
         :return:
         '''
         for iou_type in self.iou_types:
-            self.eval_imgs[iou_type] = np.concatenate(self.eval_imgs[iou_type], 2)
-            create_common_coco_eval(self.coco_eval[iou_type], self.img_ids, self.eval_imgs[iou_type])
+            self.eval_imgs[iou_type] = np.concatenate(
+                self.eval_imgs[iou_type], 2)
+            create_common_coco_eval(
+                self.coco_eval[iou_type],
+                self.img_ids,
+                self.eval_imgs[iou_type])
 
     def accumulate(self):
         '''
@@ -89,6 +98,7 @@ class CocoEvaluator:
     def prepare(self, predictions, iou_type):
         '''
         Metric preparation
+
         :param predictions: list of label predictions
         :param iou_type: type of iou evaluation
         :return:
@@ -150,9 +160,8 @@ class CocoEvaluator:
             scores = prediction["scores"].tolist()
             labels = prediction["labels"].tolist()
 
-            rles = [
-                mask_util.encode(np.array(mask[0, :, :, np.newaxis], dtype=np.uint8, order="F"))[0] for mask in masks
-            ]
+            rles = [mask_util.encode(np.array(
+                mask[0, :, :, np.newaxis], dtype=np.uint8, order="F"))[0] for mask in masks]
             for rle in rles:
                 rle["counts"] = rle["counts"].decode("utf-8")
 
@@ -264,4 +273,5 @@ def evaluate(imgs):
     '''
     with redirect_stdout(io.StringIO()):
         imgs.evaluate()
-    return imgs.params.imgIds, np.asarray(imgs.evalImgs).reshape(-1, len(imgs.params.areaRng), len(imgs.params.imgIds))
+    return imgs.params.imgIds, np.asarray(
+        imgs.evalImgs).reshape(-1, len(imgs.params.areaRng), len(imgs.params.imgIds))

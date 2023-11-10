@@ -112,7 +112,8 @@ def _coco_remove_images_without_annotations(dataset, cat_list=None):
         return all(any(o <= 1 for o in obj["bbox"][2:]) for obj in anno)
 
     def _count_visible_keypoints(anno):
-        return sum(sum(1 for v in ann["keypoints"][2::3] if v > 0) for ann in anno)
+        return sum(sum(1 for v in ann["keypoints"]
+                   [2::3] if v > 0) for ann in anno)
 
     min_keypoints_per_image = 10
 

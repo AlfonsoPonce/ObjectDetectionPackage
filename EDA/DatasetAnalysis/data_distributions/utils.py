@@ -11,6 +11,7 @@ from PIL import Image
 IMAGE_EXTENSION_LIST = ['.png', '.jpg', '.jpeg']
 LABEL_EXTENSION_LIST = ['.xml', '.json', '.txt']
 
+
 def number_of_images(images_dir: Path) -> int:
     '''
     Computes the number of images in a data folder. Images must be in images/ folder below task/ folder.
@@ -18,13 +19,18 @@ def number_of_images(images_dir: Path) -> int:
     :param images_dir: Directory of the images
     :return: Number of images in data
     '''
-    assert images_dir.exists(), logging.error(f"{images_dir} not found")
+    try:
+        assert images_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{images_dir} not found.")
+        raise err
 
     all_images = []
     for extension in IMAGE_EXTENSION_LIST:
         all_images.extend(images_dir.glob(f'*{extension}'))
 
     return len(all_images)
+
 
 def number_of_labels(labels_dir: Path) -> int:
     '''
@@ -33,13 +39,18 @@ def number_of_labels(labels_dir: Path) -> int:
     :param root_dir: Directory of the labels
     :return: Number of images in data
     '''
-    assert labels_dir.exists(), logging.error(f"{labels_dir} not found")
+    try:
+        assert labels_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{labels_dir} not found.")
+        raise err
 
     all_labels = []
     for extension in LABEL_EXTENSION_LIST:
         all_labels.extend(labels_dir.glob(f'*{extension}'))
 
     return len(all_labels)
+
 
 def class_distribution(labels_dir: Path) -> dict:
     '''
@@ -48,13 +59,19 @@ def class_distribution(labels_dir: Path) -> dict:
     :param labels_dir:  directory of the data
     :return: First element is the distribution dictionary. Second element is a list with all class appearances.
     '''
-    assert labels_dir.exists(), logging.error(f"{labels_dir} not found")
+    try:
+        assert labels_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{labels_dir} not found.")
+        raise err
 
     for extension in LABEL_EXTENSION_LIST:
         if extension == '.xml':
-            distribution_dict, class_ocurrence_list = get_pascal_class_distribution(labels_dir)
+            distribution_dict, class_ocurrence_list = get_pascal_class_distribution(
+                labels_dir)
 
     return distribution_dict, class_ocurrence_list
+
 
 def relative_object_size_distribution(labels_dir: Path) -> tuple:
     '''
@@ -64,12 +81,17 @@ def relative_object_size_distribution(labels_dir: Path) -> tuple:
     :return: First and second elements refer the object size distribution. Third and
                      fourth element refer to the number of images with different object sizes
     '''
-    assert labels_dir.exists(), logging.error(f"{labels_dir} not found")
+    try:
+        assert labels_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{labels_dir} not found.")
+        raise err
 
     for extension in LABEL_EXTENSION_LIST:
         if extension == '.xml':
             object_size_distribution, object_size_occurrences, \
-            size_objects_per_image_distribution, size_objects_per_image_occurrences = get_pascal_size_distribution(labels_dir)
+                size_objects_per_image_distribution, size_objects_per_image_occurrences = get_pascal_size_distribution(
+                    labels_dir)
 
     return (object_size_distribution,
             object_size_occurrences,
@@ -84,7 +106,11 @@ def image_aspect_ratio_distribution(images_dir: Path) -> list:
     :param images_dir: Path of images directory.
     :return: list of occurrences.
     '''
-    assert images_dir.exists(), logging.error(f"{images_dir} not found")
+    try:
+        assert images_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{images_dir} not found.")
+        raise err
 
     list_aspect_ratio = []
 
@@ -98,9 +124,9 @@ def image_aspect_ratio_distribution(images_dir: Path) -> list:
 
     return list_aspect_ratio
 
+
 if __name__ == '__main__':
     root_dir = Path('../../../Data/FootballerDetection/raw_data')
     print(number_of_images(root_dir))
     print(number_of_labels(root_dir))
     print(class_distribution(root_dir))
-

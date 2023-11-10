@@ -9,7 +9,6 @@ from xml.etree import ElementTree as et
 import logging
 
 
-
 def read_pascal_bboxes(annot_file: Path, class_list: list) -> tuple:
     '''
     Function that reads pascal bboxes and returns them in a tuple
@@ -39,10 +38,6 @@ def read_pascal_bboxes(annot_file: Path, class_list: list) -> tuple:
         # ymax = right corner y-coordinates
         ymax = int(member.find('bndbox').find('ymax').text)
 
-
         boxes.append([xmin, ymin, xmax, ymax])
 
-
     return (boxes, labels)
-
-

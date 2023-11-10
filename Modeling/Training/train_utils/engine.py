@@ -16,13 +16,13 @@ from ..train_utils.coco_utils import get_coco_api_from_dataset
 
 
 def train_one_epoch(
-    model, 
-    optimizer, 
-    data_loader, 
-    device, 
-    epoch, 
+    model,
+    optimizer,
+    data_loader,
+    device,
+    epoch,
     train_loss_hist,
-    print_freq, 
+    print_freq,
     scaler=None,
     scheduler=None
 ):
@@ -41,7 +41,9 @@ def train_one_epoch(
     '''
     model.train()
     metric_logger = utils.MetricLogger(delimiter="  ")
-    metric_logger.add_meter("lr", utils.SmoothedValue(window_size=1, fmt="{value:.6f}"))
+    metric_logger.add_meter(
+        "lr", utils.SmoothedValue(
+            window_size=1, fmt="{value:.6f}"))
     header = f"Epoch: [{epoch}]"
 
     # List to store batch losses.
@@ -57,7 +59,8 @@ def train_one_epoch(
         )
     optimizer.zero_grad()
     step_counter = 0
-    for images, targets in metric_logger.log_every(data_loader, print_freq, header):
+    for images, targets in metric_logger.log_every(
+            data_loader, print_freq, header):
         images = list(image.to(device) for image in images)
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
         with torch.cuda.amp.autocast(enabled=scaler is not None):
@@ -74,7 +77,6 @@ def train_one_epoch(
             print(f"Loss is {loss_value}, stopping training")
             print(loss_dict_reduced)
             sys.exit(1)
-
 
         if scaler is not None:
             scaler.scale(losses).backward()
@@ -94,7 +96,7 @@ def train_one_epoch(
         train_loss_hist.send(loss_value)
 
         if scheduler is not None:
-            scheduler.step(epoch + (step_counter/len(data_loader)))
+            scheduler.step(epoch + (step_counter / len(data_loader)))
 
     return metric_logger, batch_loss_list
 
@@ -111,7 +113,9 @@ def _get_iou_types(model):
     iou_types = ["bbox"]
     if isinstance(model_without_ddp, torchvision.models.detection.MaskRCNN):
         iou_types.append("segm")
-    if isinstance(model_without_ddp, torchvision.models.detection.KeypointRCNN):
+    if isinstance(
+            model_without_ddp,
+            torchvision.models.detection.KeypointRCNN):
         iou_types.append("keypoints")
     return iou_types
 
@@ -145,15 +149,22 @@ def evaluate(model, data_loader, device):
         model_time = time.time()
         outputs = model(images)
 
-        outputs = [{k: v.to(cpu_device) for k, v in t.items()} for t in outputs]
+        outputs = [{k: v.to(cpu_device) for k, v in t.items()}
+                   for t in outputs]
         model_time = time.time() - model_time
 
-        res = {target["image_id"].item(): output for target, output in zip(targets, outputs)}
-        #print(res)
+        res = {
+            target["image_id"].item(): output for target,
+            output in zip(
+                targets,
+                outputs)}
+        # print(res)
         evaluator_time = time.time()
         coco_evaluator.update(res)
         evaluator_time = time.time() - evaluator_time
-        metric_logger.update(model_time=model_time, evaluator_time=evaluator_time)
+        metric_logger.update(
+            model_time=model_time,
+            evaluator_time=evaluator_time)
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()

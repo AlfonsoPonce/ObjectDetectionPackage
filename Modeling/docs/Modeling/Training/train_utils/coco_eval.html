@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>Modeling.Training.train_utils.coco_eval API documentation</title>
+<meta name="description" content="Module that implements coco evaluation functionality …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>Modeling.Training.train_utils.coco_eval</code></h1>
+</header>
+<section id="section-intro">
+<p>Module that implements coco evaluation functionality.</p>
+<p>Author: Alfonso Ponce Navarro
+Date: 05/11/2023</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#39;&#39;&#39;
+Module that implements coco evaluation functionality.
+
+Author: Alfonso Ponce Navarro
+Date: 05/11/2023
+&#39;&#39;&#39;
+import copy
+import io
+from contextlib import redirect_stdout
+
+import numpy as np
+import pycocotools.mask as mask_util
+import torch
+from ..train_utils import utils
+from pycocotools.coco import COCO
+from pycocotools.cocoeval import COCOeval
+
+
+class CocoEvaluator:
+    &#39;&#39;&#39;
+    Class that implements coco evaluator.
+    &#39;&#39;&#39;
+    def __init__(self, coco_gt, iou_types):
+        &#39;&#39;&#39;
+        Instantiates coco evaluator object.
+
+        :param coco_gt: Coco ground truth annotations
+        :param iou_types: Type of iou to be evaluated
+        &#39;&#39;&#39;
+        assert isinstance(iou_types, (list, tuple))
+        coco_gt = copy.deepcopy(coco_gt)
+        self.coco_gt = coco_gt
+
+        self.iou_types = iou_types
+        self.coco_eval = {}
+        for iou_type in iou_types:
+            self.coco_eval[iou_type] = COCOeval(coco_gt, iouType=iou_type)
+
+        self.img_ids = []
+        self.eval_imgs = {k: [] for k in iou_types}
+
+    def update(self, predictions):
+        &#39;&#39;&#39;
+        Function that updates new predictions
+
+        :param predictions: labels prediction
+        :return:
+        &#39;&#39;&#39;
+        img_ids = list(np.unique(list(predictions.keys())))
+        self.img_ids.extend(img_ids)
+
+        for iou_type in self.iou_types:
+            results = self.prepare(predictions, iou_type)
+            with redirect_stdout(io.StringIO()):
+                coco_dt = COCO.loadRes(self.coco_gt, results) if results else COCO()
+            coco_eval = self.coco_eval[iou_type]
+
+            coco_eval.cocoDt = coco_dt
+            coco_eval.params.imgIds = list(img_ids)
+            img_ids, eval_imgs = evaluate(coco_eval)
+
+            self.eval_imgs[iou_type].append(eval_imgs)
+
+    def synchronize_between_processes(self):
+        &#39;&#39;&#39;
+        Function that synchronize processes
+
+        :return:
+        &#39;&#39;&#39;
+        for iou_type in self.iou_types:
+            self.eval_imgs[iou_type] = np.concatenate(self.eval_imgs[iou_type], 2)
+            create_common_coco_eval(self.coco_eval[iou_type], self.img_ids, self.eval_imgs[iou_type])
+
+    def accumulate(self):
+        &#39;&#39;&#39;
+        Accumulate coco results
+        :return:
+        &#39;&#39;&#39;
+        for coco_eval in self.coco_eval.values():
+            coco_eval.accumulate()
+
+    def summarize(self):
+        &#39;&#39;&#39;
+        Function that returns metric summary
+        :return:
+        &#39;&#39;&#39;
+        for iou_type, coco_eval in self.coco_eval.items():
+            print(f&#34;IoU metric: {iou_type}&#34;)
+            coco_eval.summarize()
+            return coco_eval
+
+    def prepare(self, predictions, iou_type):
+        &#39;&#39;&#39;
+        Metric preparation
+
+        :param predictions: list of label predictions
+        :param iou_type: type of iou evaluation
+        :return:
+        &#39;&#39;&#39;
+        if iou_type == &#34;bbox&#34;:
+            return self.prepare_for_coco_detection(predictions)
+        if iou_type == &#34;segm&#34;:
+            return self.prepare_for_coco_segmentation(predictions)
+        if iou_type == &#34;keypoints&#34;:
+            return self.prepare_for_coco_keypoint(predictions)
+        raise ValueError(f&#34;Unknown iou type {iou_type}&#34;)
+
+    def prepare_for_coco_detection(self, predictions):
+        &#39;&#39;&#39;
+        Prepare for coco detection
+        :param predictions: list of label predictions
+        :return:
+        &#39;&#39;&#39;
+        coco_results = []
+        for original_id, prediction in predictions.items():
+            if len(prediction) == 0:
+                continue
+
+            boxes = prediction[&#34;boxes&#34;]
+            boxes = convert_to_xywh(boxes).tolist()
+            scores = prediction[&#34;scores&#34;].tolist()
+            labels = prediction[&#34;labels&#34;].tolist()
+
+            coco_results.extend(
+                [
+                    {
+                        &#34;image_id&#34;: original_id,
+                        &#34;category_id&#34;: labels[k],
+                        &#34;bbox&#34;: box,
+                        &#34;score&#34;: scores[k],
+                    }
+                    for k, box in enumerate(boxes)
+                ]
+            )
+        return coco_results
+
+    def prepare_for_coco_segmentation(self, predictions):
+        &#39;&#39;&#39;
+        Function that prepares coco segmentation
+        :param predictions: list of label predictions
+        :return:
+        &#39;&#39;&#39;
+        coco_results = []
+        for original_id, prediction in predictions.items():
+            if len(prediction) == 0:
+                continue
+
+            scores = prediction[&#34;scores&#34;]
+            labels = prediction[&#34;labels&#34;]
+            masks = prediction[&#34;masks&#34;]
+
+            masks = masks &gt; 0.5
+
+            scores = prediction[&#34;scores&#34;].tolist()
+            labels = prediction[&#34;labels&#34;].tolist()
+
+            rles = [
+                mask_util.encode(np.array(mask[0, :, :, np.newaxis], dtype=np.uint8, order=&#34;F&#34;))[0] for mask in masks
+            ]
+            for rle in rles:
+                rle[&#34;counts&#34;] = rle[&#34;counts&#34;].decode(&#34;utf-8&#34;)
+
+            coco_results.extend(
+                [
+                    {
+                        &#34;image_id&#34;: original_id,
+                        &#34;category_id&#34;: labels[k],
+                        &#34;segmentation&#34;: rle,
+                        &#34;score&#34;: scores[k],
+                    }
+                    for k, rle in enumerate(rles)
+                ]
+            )
+        return coco_results
+
+    def prepare_for_coco_keypoint(self, predictions):
+        &#39;&#39;&#39;
+        Function that prepares coco keypoints detection
+        :param predictions: list of label predictions
+        :return:
+        &#39;&#39;&#39;
+        coco_results = []
+        for original_id, prediction in predictions.items():
+            if len(prediction) == 0:
+                continue
+
+            boxes = prediction[&#34;boxes&#34;]
+            boxes = convert_to_xywh(boxes).tolist()
+            scores = prediction[&#34;scores&#34;].tolist()
+            labels = prediction[&#34;labels&#34;].tolist()
+            keypoints = prediction[&#34;keypoints&#34;]
+            keypoints = keypoints.flatten(start_dim=1).tolist()
+
+            coco_results.extend(
+                [
+                    {
+                        &#34;image_id&#34;: original_id,
+                        &#34;category_id&#34;: labels[k],
+                        &#34;keypoints&#34;: keypoint,
+                        &#34;score&#34;: scores[k],
+                    }
+                    for k, keypoint in enumerate(keypoints)
+                ]
+            )
+        return coco_results
+
+
+def convert_to_xywh(boxes):
+    &#39;&#39;&#39;
+    Conversion of bbox detection.
+    :param boxes: bbox detection.
+    :return:
+    &#39;&#39;&#39;
+    xmin, ymin, xmax, ymax = boxes.unbind(1)
+    return torch.stack((xmin, ymin, xmax - xmin, ymax - ymin), dim=1)
+
+
+def merge(img_ids, eval_imgs):
+    &#39;&#39;&#39;
+    Function that merges image ground truth and image to evaluate
+    :param img_ids: Ground truth images
+    :param eval_imgs: Evaluation images
+    :return:
+    &#39;&#39;&#39;
+    all_img_ids = utils.all_gather(img_ids)
+    all_eval_imgs = utils.all_gather(eval_imgs)
+
+    merged_img_ids = []
+    for p in all_img_ids:
+        merged_img_ids.extend(p)
+
+    merged_eval_imgs = []
+    for p in all_eval_imgs:
+        merged_eval_imgs.append(p)
+
+    merged_img_ids = np.array(merged_img_ids)
+    merged_eval_imgs = np.concatenate(merged_eval_imgs, 2)
+
+    # keep only unique (and in sorted order) images
+    merged_img_ids, idx = np.unique(merged_img_ids, return_index=True)
+    merged_eval_imgs = merged_eval_imgs[..., idx]
+
+    return merged_img_ids, merged_eval_imgs
+
+
+def create_common_coco_eval(coco_eval, img_ids, eval_imgs):
+    &#39;&#39;&#39;
+    Function that creates coco evaluation
+    :param coco_eval: coco object to perform evaluation
+    :param img_ids: ground truth image ids
+    :param eval_imgs: images to be evaluated
+    :return:
+    &#39;&#39;&#39;
+    img_ids, eval_imgs = merge(img_ids, eval_imgs)
+    img_ids = list(img_ids)
+    eval_imgs = list(eval_imgs.flatten())
+
+    coco_eval.evalImgs = eval_imgs
+    coco_eval.params.imgIds = img_ids
+    coco_eval._paramsEval = copy.deepcopy(coco_eval.params)
+
+
+def evaluate(imgs):
+    &#39;&#39;&#39;
+    Function that performs images evaluations
+    :param imgs: images to be evaluated
+    :return:
+    &#39;&#39;&#39;
+    with redirect_stdout(io.StringIO()):
+        imgs.evaluate()
+    return imgs.params.imgIds, np.asarray(imgs.evalImgs).reshape(-1, len(imgs.params.areaRng), len(imgs.params.imgIds))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="Modeling.Training.train_utils.coco_eval.convert_to_xywh"><code class="name flex">
+<span>def <span class="ident">convert_to_xywh</span></span>(<span>boxes)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Conversion of bbox detection.
+:param boxes: bbox detection.
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_to_xywh(boxes):
+    &#39;&#39;&#39;
+    Conversion of bbox detection.
+    :param boxes: bbox detection.
+    :return:
+    &#39;&#39;&#39;
+    xmin, ymin, xmax, ymax = boxes.unbind(1)
+    return torch.stack((xmin, ymin, xmax - xmin, ymax - ymin), dim=1)</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.create_common_coco_eval"><code class="name flex">
+<span>def <span class="ident">create_common_coco_eval</span></span>(<span>coco_eval, img_ids, eval_imgs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function that creates coco evaluation
+:param coco_eval: coco object to perform evaluation
+:param img_ids: ground truth image ids
+:param eval_imgs: images to be evaluated
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_common_coco_eval(coco_eval, img_ids, eval_imgs):
+    &#39;&#39;&#39;
+    Function that creates coco evaluation
+    :param coco_eval: coco object to perform evaluation
+    :param img_ids: ground truth image ids
+    :param eval_imgs: images to be evaluated
+    :return:
+    &#39;&#39;&#39;
+    img_ids, eval_imgs = merge(img_ids, eval_imgs)
+    img_ids = list(img_ids)
+    eval_imgs = list(eval_imgs.flatten())
+
+    coco_eval.evalImgs = eval_imgs
+    coco_eval.params.imgIds = img_ids
+    coco_eval._paramsEval = copy.deepcopy(coco_eval.params)</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.evaluate"><code class="name flex">
+<span>def <span class="ident">evaluate</span></span>(<span>imgs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function that performs images evaluations
+:param imgs: images to be evaluated
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def evaluate(imgs):
+    &#39;&#39;&#39;
+    Function that performs images evaluations
+    :param imgs: images to be evaluated
+    :return:
+    &#39;&#39;&#39;
+    with redirect_stdout(io.StringIO()):
+        imgs.evaluate()
+    return imgs.params.imgIds, np.asarray(imgs.evalImgs).reshape(-1, len(imgs.params.areaRng), len(imgs.params.imgIds))</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.merge"><code class="name flex">
+<span>def <span class="ident">merge</span></span>(<span>img_ids, eval_imgs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function that merges image ground truth and image to evaluate
+:param img_ids: Ground truth images
+:param eval_imgs: Evaluation images
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def merge(img_ids, eval_imgs):
+    &#39;&#39;&#39;
+    Function that merges image ground truth and image to evaluate
+    :param img_ids: Ground truth images
+    :param eval_imgs: Evaluation images
+    :return:
+    &#39;&#39;&#39;
+    all_img_ids = utils.all_gather(img_ids)
+    all_eval_imgs = utils.all_gather(eval_imgs)
+
+    merged_img_ids = []
+    for p in all_img_ids:
+        merged_img_ids.extend(p)
+
+    merged_eval_imgs = []
+    for p in all_eval_imgs:
+        merged_eval_imgs.append(p)
+
+    merged_img_ids = np.array(merged_img_ids)
+    merged_eval_imgs = np.concatenate(merged_eval_imgs, 2)
+
+    # keep only unique (and in sorted order) images
+    merged_img_ids, idx = np.unique(merged_img_ids, return_index=True)
+    merged_eval_imgs = merged_eval_imgs[..., idx]
+
+    return merged_img_ids, merged_eval_imgs</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator"><code class="flex name class">
+<span>class <span class="ident">CocoEvaluator</span></span>
+<span>(</span><span>coco_gt, iou_types)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class that implements coco evaluator.</p>
+<p>Instantiates coco evaluator object.</p>
+<p>:param coco_gt: Coco ground truth annotations
+:param iou_types: Type of iou to be evaluated</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CocoEvaluator:
+    &#39;&#39;&#39;
+    Class that implements coco evaluator.
+    &#39;&#39;&#39;
+    def __init__(self, coco_gt, iou_types):
+        &#39;&#39;&#39;
+        Instantiates coco evaluator object.
+
+        :param coco_gt: Coco ground truth annotations
+        :param iou_types: Type of iou to be evaluated
+        &#39;&#39;&#39;
+        assert isinstance(iou_types, (list, tuple))
+        coco_gt = copy.deepcopy(coco_gt)
+        self.coco_gt = coco_gt
+
+        self.iou_types = iou_types
+        self.coco_eval = {}
+        for iou_type in iou_types:
+            self.coco_eval[iou_type] = COCOeval(coco_gt, iouType=iou_type)
+
+        self.img_ids = []
+        self.eval_imgs = {k: [] for k in iou_types}
+
+    def update(self, predictions):
+        &#39;&#39;&#39;
+        Function that updates new predictions
+
+        :param predictions: labels prediction
+        :return:
+        &#39;&#39;&#39;
+        img_ids = list(np.unique(list(predictions.keys())))
+        self.img_ids.extend(img_ids)
+
+        for iou_type in self.iou_types:
+            results = self.prepare(predictions, iou_type)
+            with redirect_stdout(io.StringIO()):
+                coco_dt = COCO.loadRes(self.coco_gt, results) if results else COCO()
+            coco_eval = self.coco_eval[iou_type]
+
+            coco_eval.cocoDt = coco_dt
+            coco_eval.params.imgIds = list(img_ids)
+            img_ids, eval_imgs = evaluate(coco_eval)
+
+            self.eval_imgs[iou_type].append(eval_imgs)
+
+    def synchronize_between_processes(self):
+        &#39;&#39;&#39;
+        Function that synchronize processes
+
+        :return:
+        &#39;&#39;&#39;
+        for iou_type in self.iou_types:
+            self.eval_imgs[iou_type] = np.concatenate(self.eval_imgs[iou_type], 2)
+            create_common_coco_eval(self.coco_eval[iou_type], self.img_ids, self.eval_imgs[iou_type])
+
+    def accumulate(self):
+        &#39;&#39;&#39;
+        Accumulate coco results
+        :return:
+        &#39;&#39;&#39;
+        for coco_eval in self.coco_eval.values():
+            coco_eval.accumulate()
+
+    def summarize(self):
+        &#39;&#39;&#39;
+        Function that returns metric summary
+        :return:
+        &#39;&#39;&#39;
+        for iou_type, coco_eval in self.coco_eval.items():
+            print(f&#34;IoU metric: {iou_type}&#34;)
+            coco_eval.summarize()
+            return coco_eval
+
+    def prepare(self, predictions, iou_type):
+        &#39;&#39;&#39;
+        Metric preparation
+
+        :param predictions: list of label predictions
+        :param iou_type: type of iou evaluation
+        :return:
+        &#39;&#39;&#39;
+        if iou_type == &#34;bbox&#34;:
+            return self.prepare_for_coco_detection(predictions)
+        if iou_type == &#34;segm&#34;:
+            return self.prepare_for_coco_segmentation(predictions)
+        if iou_type == &#34;keypoints&#34;:
+            return self.prepare_for_coco_keypoint(predictions)
+        raise ValueError(f&#34;Unknown iou type {iou_type}&#34;)
+
+    def prepare_for_coco_detection(self, predictions):
+        &#39;&#39;&#39;
+        Prepare for coco detection
+        :param predictions: list of label predictions
+        :return:
+        &#39;&#39;&#39;
+        coco_results = []
+        for original_id, prediction in predictions.items():
+            if len(prediction) == 0:
+                continue
+
+            boxes = prediction[&#34;boxes&#34;]
+            boxes = convert_to_xywh(boxes).tolist()
+            scores = prediction[&#34;scores&#34;].tolist()
+            labels = prediction[&#34;labels&#34;].tolist()
+
+            coco_results.extend(
+                [
+                    {
+                        &#34;image_id&#34;: original_id,
+                        &#34;category_id&#34;: labels[k],
+                        &#34;bbox&#34;: box,
+                        &#34;score&#34;: scores[k],
+                    }
+                    for k, box in enumerate(boxes)
+                ]
+            )
+        return coco_results
+
+    def prepare_for_coco_segmentation(self, predictions):
+        &#39;&#39;&#39;
+        Function that prepares coco segmentation
+        :param predictions: list of label predictions
+        :return:
+        &#39;&#39;&#39;
+        coco_results = []
+        for original_id, prediction in predictions.items():
+            if len(prediction) == 0:
+                continue
+
+            scores = prediction[&#34;scores&#34;]
+            labels = prediction[&#34;labels&#34;]
+            masks = prediction[&#34;masks&#34;]
+
+            masks = masks &gt; 0.5
+
+            scores = prediction[&#34;scores&#34;].tolist()
+            labels = prediction[&#34;labels&#34;].tolist()
+
+            rles = [
+                mask_util.encode(np.array(mask[0, :, :, np.newaxis], dtype=np.uint8, order=&#34;F&#34;))[0] for mask in masks
+            ]
+            for rle in rles:
+                rle[&#34;counts&#34;] = rle[&#34;counts&#34;].decode(&#34;utf-8&#34;)
+
+            coco_results.extend(
+                [
+                    {
+                        &#34;image_id&#34;: original_id,
+                        &#34;category_id&#34;: labels[k],
+                        &#34;segmentation&#34;: rle,
+                        &#34;score&#34;: scores[k],
+                    }
+                    for k, rle in enumerate(rles)
+                ]
+            )
+        return coco_results
+
+    def prepare_for_coco_keypoint(self, predictions):
+        &#39;&#39;&#39;
+        Function that prepares coco keypoints detection
+        :param predictions: list of label predictions
+        :return:
+        &#39;&#39;&#39;
+        coco_results = []
+        for original_id, prediction in predictions.items():
+            if len(prediction) == 0:
+                continue
+
+            boxes = prediction[&#34;boxes&#34;]
+            boxes = convert_to_xywh(boxes).tolist()
+            scores = prediction[&#34;scores&#34;].tolist()
+            labels = prediction[&#34;labels&#34;].tolist()
+            keypoints = prediction[&#34;keypoints&#34;]
+            keypoints = keypoints.flatten(start_dim=1).tolist()
+
+            coco_results.extend(
+                [
+                    {
+                        &#34;image_id&#34;: original_id,
+                        &#34;category_id&#34;: labels[k],
+                        &#34;keypoints&#34;: keypoint,
+                        &#34;score&#34;: scores[k],
+                    }
+                    for k, keypoint in enumerate(keypoints)
+                ]
+            )
+        return coco_results</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator.accumulate"><code class="name flex">
+<span>def <span class="ident">accumulate</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Accumulate coco results
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def accumulate(self):
+    &#39;&#39;&#39;
+    Accumulate coco results
+    :return:
+    &#39;&#39;&#39;
+    for coco_eval in self.coco_eval.values():
+        coco_eval.accumulate()</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare"><code class="name flex">
+<span>def <span class="ident">prepare</span></span>(<span>self, predictions, iou_type)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Metric preparation</p>
+<p>:param predictions: list of label predictions
+:param iou_type: type of iou evaluation
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prepare(self, predictions, iou_type):
+    &#39;&#39;&#39;
+    Metric preparation
+
+    :param predictions: list of label predictions
+    :param iou_type: type of iou evaluation
+    :return:
+    &#39;&#39;&#39;
+    if iou_type == &#34;bbox&#34;:
+        return self.prepare_for_coco_detection(predictions)
+    if iou_type == &#34;segm&#34;:
+        return self.prepare_for_coco_segmentation(predictions)
+    if iou_type == &#34;keypoints&#34;:
+        return self.prepare_for_coco_keypoint(predictions)
+    raise ValueError(f&#34;Unknown iou type {iou_type}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_detection"><code class="name flex">
+<span>def <span class="ident">prepare_for_coco_detection</span></span>(<span>self, predictions)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Prepare for coco detection
+:param predictions: list of label predictions
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prepare_for_coco_detection(self, predictions):
+    &#39;&#39;&#39;
+    Prepare for coco detection
+    :param predictions: list of label predictions
+    :return:
+    &#39;&#39;&#39;
+    coco_results = []
+    for original_id, prediction in predictions.items():
+        if len(prediction) == 0:
+            continue
+
+        boxes = prediction[&#34;boxes&#34;]
+        boxes = convert_to_xywh(boxes).tolist()
+        scores = prediction[&#34;scores&#34;].tolist()
+        labels = prediction[&#34;labels&#34;].tolist()
+
+        coco_results.extend(
+            [
+                {
+                    &#34;image_id&#34;: original_id,
+                    &#34;category_id&#34;: labels[k],
+                    &#34;bbox&#34;: box,
+                    &#34;score&#34;: scores[k],
+                }
+                for k, box in enumerate(boxes)
+            ]
+        )
+    return coco_results</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_keypoint"><code class="name flex">
+<span>def <span class="ident">prepare_for_coco_keypoint</span></span>(<span>self, predictions)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function that prepares coco keypoints detection
+:param predictions: list of label predictions
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prepare_for_coco_keypoint(self, predictions):
+    &#39;&#39;&#39;
+    Function that prepares coco keypoints detection
+    :param predictions: list of label predictions
+    :return:
+    &#39;&#39;&#39;
+    coco_results = []
+    for original_id, prediction in predictions.items():
+        if len(prediction) == 0:
+            continue
+
+        boxes = prediction[&#34;boxes&#34;]
+        boxes = convert_to_xywh(boxes).tolist()
+        scores = prediction[&#34;scores&#34;].tolist()
+        labels = prediction[&#34;labels&#34;].tolist()
+        keypoints = prediction[&#34;keypoints&#34;]
+        keypoints = keypoints.flatten(start_dim=1).tolist()
+
+        coco_results.extend(
+            [
+                {
+                    &#34;image_id&#34;: original_id,
+                    &#34;category_id&#34;: labels[k],
+                    &#34;keypoints&#34;: keypoint,
+                    &#34;score&#34;: scores[k],
+                }
+                for k, keypoint in enumerate(keypoints)
+            ]
+        )
+    return coco_results</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_segmentation"><code class="name flex">
+<span>def <span class="ident">prepare_for_coco_segmentation</span></span>(<span>self, predictions)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function that prepares coco segmentation
+:param predictions: list of label predictions
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prepare_for_coco_segmentation(self, predictions):
+    &#39;&#39;&#39;
+    Function that prepares coco segmentation
+    :param predictions: list of label predictions
+    :return:
+    &#39;&#39;&#39;
+    coco_results = []
+    for original_id, prediction in predictions.items():
+        if len(prediction) == 0:
+            continue
+
+        scores = prediction[&#34;scores&#34;]
+        labels = prediction[&#34;labels&#34;]
+        masks = prediction[&#34;masks&#34;]
+
+        masks = masks &gt; 0.5
+
+        scores = prediction[&#34;scores&#34;].tolist()
+        labels = prediction[&#34;labels&#34;].tolist()
+
+        rles = [
+            mask_util.encode(np.array(mask[0, :, :, np.newaxis], dtype=np.uint8, order=&#34;F&#34;))[0] for mask in masks
+        ]
+        for rle in rles:
+            rle[&#34;counts&#34;] = rle[&#34;counts&#34;].decode(&#34;utf-8&#34;)
+
+        coco_results.extend(
+            [
+                {
+                    &#34;image_id&#34;: original_id,
+                    &#34;category_id&#34;: labels[k],
+                    &#34;segmentation&#34;: rle,
+                    &#34;score&#34;: scores[k],
+                }
+                for k, rle in enumerate(rles)
+            ]
+        )
+    return coco_results</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator.summarize"><code class="name flex">
+<span>def <span class="ident">summarize</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function that returns metric summary
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def summarize(self):
+    &#39;&#39;&#39;
+    Function that returns metric summary
+    :return:
+    &#39;&#39;&#39;
+    for iou_type, coco_eval in self.coco_eval.items():
+        print(f&#34;IoU metric: {iou_type}&#34;)
+        coco_eval.summarize()
+        return coco_eval</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator.synchronize_between_processes"><code class="name flex">
+<span>def <span class="ident">synchronize_between_processes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function that synchronize processes</p>
+<p>:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def synchronize_between_processes(self):
+    &#39;&#39;&#39;
+    Function that synchronize processes
+
+    :return:
+    &#39;&#39;&#39;
+    for iou_type in self.iou_types:
+        self.eval_imgs[iou_type] = np.concatenate(self.eval_imgs[iou_type], 2)
+        create_common_coco_eval(self.coco_eval[iou_type], self.img_ids, self.eval_imgs[iou_type])</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.coco_eval.CocoEvaluator.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, predictions)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function that updates new predictions</p>
+<p>:param predictions: labels prediction
+:return:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(self, predictions):
+    &#39;&#39;&#39;
+    Function that updates new predictions
+
+    :param predictions: labels prediction
+    :return:
+    &#39;&#39;&#39;
+    img_ids = list(np.unique(list(predictions.keys())))
+    self.img_ids.extend(img_ids)
+
+    for iou_type in self.iou_types:
+        results = self.prepare(predictions, iou_type)
+        with redirect_stdout(io.StringIO()):
+            coco_dt = COCO.loadRes(self.coco_gt, results) if results else COCO()
+        coco_eval = self.coco_eval[iou_type]
+
+        coco_eval.cocoDt = coco_dt
+        coco_eval.params.imgIds = list(img_ids)
+        img_ids, eval_imgs = evaluate(coco_eval)
+
+        self.eval_imgs[iou_type].append(eval_imgs)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="Modeling.Training.train_utils" href="index.html">Modeling.Training.train_utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="Modeling.Training.train_utils.coco_eval.convert_to_xywh" href="#Modeling.Training.train_utils.coco_eval.convert_to_xywh">convert_to_xywh</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.create_common_coco_eval" href="#Modeling.Training.train_utils.coco_eval.create_common_coco_eval">create_common_coco_eval</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.evaluate" href="#Modeling.Training.train_utils.coco_eval.evaluate">evaluate</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.merge" href="#Modeling.Training.train_utils.coco_eval.merge">merge</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator">CocoEvaluator</a></code></h4>
+<ul class="">
+<li><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator.accumulate" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator.accumulate">accumulate</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare">prepare</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_detection" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_detection">prepare_for_coco_detection</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_keypoint" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_keypoint">prepare_for_coco_keypoint</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_segmentation" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator.prepare_for_coco_segmentation">prepare_for_coco_segmentation</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator.summarize" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator.summarize">summarize</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator.synchronize_between_processes" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator.synchronize_between_processes">synchronize_between_processes</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.coco_eval.CocoEvaluator.update" href="#Modeling.Training.train_utils.coco_eval.CocoEvaluator.update">update</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

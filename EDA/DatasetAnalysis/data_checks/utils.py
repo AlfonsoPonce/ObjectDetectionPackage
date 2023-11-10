@@ -18,6 +18,7 @@ import math
 IMAGE_EXTENSION_LIST = ['.png', '.jpg', '.jpeg']
 LABEL_EXTENSION_LIST = ['.xml', '.json', '.txt']
 
+
 def check_label_extensions(labels_dir: Path) -> dict:
     '''
     Checks label extensions inside labels folder.
@@ -25,7 +26,11 @@ def check_label_extensions(labels_dir: Path) -> dict:
     :param labels_dir: labels folder.
     :return: Number of files per available extension (available extensions: xml (PASCAL VOC), json(COCO), txt(YOLO)).
     '''
-    assert labels_dir.exists(), logging.error(f"{labels_dir} not found.")
+    try:
+        assert labels_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{labels_dir} not found.")
+        raise err
 
     extension_dict = {'.xml': 0, '.json': 0, '.txt': 0}
     for extension in LABEL_EXTENSION_LIST:
@@ -41,13 +46,18 @@ def check_images_extensions(images_dir: Path) -> dict:
     :param images_dir: images folder.
     :return: Number of files per available extension (available extensions: png, jpg, jpeg).
     '''
-    assert images_dir.exists(), logging.error(f"{images_dir} not found.")
+    try:
+        assert images_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{images_dir} not found.")
+        raise err
 
     extension_dict = {'.png': 0, '.jpg': 0, '.jpeg': 0}
     for extension in IMAGE_EXTENSION_LIST:
         extension_dict[extension] = len(list(images_dir.glob(f'*{extension}')))
 
     return extension_dict
+
 
 def check_corrupted_images(images_dir: Path) -> list:
     '''
@@ -56,8 +66,11 @@ def check_corrupted_images(images_dir: Path) -> list:
     :param images_dir: images folder.
     :return: list of corrupted images.
     '''
-    assert images_dir.exists(), logging.error(f"{images_dir} not found.")
-
+    try:
+        assert images_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{images_dir} not found.")
+        raise err
 
     corrupted_file_list = []
     for extension in IMAGE_EXTENSION_LIST:
@@ -69,11 +82,12 @@ def check_corrupted_images(images_dir: Path) -> list:
                 im = Image.open(str(image_file))
                 im.transpose(Image.FLIP_LEFT_RIGHT)
                 im.close()
-            except:
+            except BaseException:
                 corrupted_file_list.append(image_file.name)
                 logging.warning(f"Found corrupted image {image_file.name}")
 
     return corrupted_file_list
+
 
 def check_unpaired_entities(images_dir: Path, labels_dir: Path) -> dict:
     '''
@@ -83,11 +97,19 @@ def check_unpaired_entities(images_dir: Path, labels_dir: Path) -> dict:
     :param labels_dir: labels folder path.
     :return: Images without labels and labels without images.
     '''
-    assert images_dir.exists(), logging.error(f"{images_dir} not found.")
-    assert labels_dir.exists(), logging.error(f"{images_dir} not found.")
+    try:
+        assert images_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{images_dir} not found.")
+        raise err
+
+    try:
+        assert labels_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{labels_dir} not found.")
+        raise err
 
     unpaired_entities_dict = {'images_wo_labels': [], 'labels_wo_images': []}
-
 
     image_list = []
     label_list = []
@@ -100,10 +122,13 @@ def check_unpaired_entities(images_dir: Path, labels_dir: Path) -> dict:
     image_set = set([file.stem for file in image_list])
     labels_set = set([file.stem for file in label_list])
 
-    unpaired_entities_dict['images_wo_labels'] = image_set.difference_update(labels_set)
-    unpaired_entities_dict['labels_wo_images'] = labels_set.difference_update(image_set)
+    unpaired_entities_dict['images_wo_labels'] = image_set.difference_update(
+        labels_set)
+    unpaired_entities_dict['labels_wo_images'] = labels_set.difference_update(
+        image_set)
 
     return unpaired_entities_dict
+
 
 def check_duplicated_images(images_dir: Path) -> list:
     '''
@@ -112,7 +137,11 @@ def check_duplicated_images(images_dir: Path) -> list:
     :param images_dir: images folder path.
     :return: List of pairs whose pairs contain duplicated images.
     '''
-    assert images_dir.exists(), logging.error(f"{images_dir} not found.")
+    try:
+        assert images_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{images_dir} not found.")
+        raise err
 
     duplicate_images_list = []
 
@@ -125,11 +154,13 @@ def check_duplicated_images(images_dir: Path) -> list:
 
             ini = time.time()
             while img_idx_to_remove < len(img_files):
-                img_to_remove = Image.open(str(img_files[img_idx_to_remove])).convert('RGB')
+                img_to_remove = Image.open(
+                    str(img_files[img_idx_to_remove])).convert('RGB')
                 diff = ImageChops.difference(img, img_to_remove)
 
-                if not diff.getbbox(): #If not different images
-                    duplicate_images_list.append((img_files[img_idx].name, img_files[img_idx_to_remove].name))
+                if not diff.getbbox():  # If not different images
+                    duplicate_images_list.append(
+                        (img_files[img_idx].name, img_files[img_idx_to_remove].name))
 
                 img_idx_to_remove += 1
             print(f"Tiempo transcurrido: {ini - time.time()}")
@@ -137,7 +168,10 @@ def check_duplicated_images(images_dir: Path) -> list:
     return duplicate_images_list
 
 
-def compute_kernel(img_idx_list: list, img_files: list, result_queue: Queue) -> None:
+def compute_kernel(
+        img_idx_list: list,
+        img_files: list,
+        result_queue: Queue) -> None:
     '''
     Gets duplicated images in a dataset in parallel.
 
@@ -151,16 +185,18 @@ def compute_kernel(img_idx_list: list, img_files: list, result_queue: Queue) -> 
         img_idx_to_remove = img_idx + 1
 
         while img_idx_to_remove < len(img_files):
-            img_to_remove = Image.open(str(img_files[img_idx_to_remove])).convert('RGB')
+            img_to_remove = Image.open(
+                str(img_files[img_idx_to_remove])).convert('RGB')
             diff = ImageChops.difference(img, img_to_remove)
 
             if not diff.getbbox():  # If not different images
-                duplicate_images_list.append((img_files[img_idx].name, img_files[img_idx_to_remove].name))
+                duplicate_images_list.append(
+                    (img_files[img_idx].name, img_files[img_idx_to_remove].name))
 
             img_idx_to_remove += 1
 
-
     result_queue.put(duplicate_images_list)
+
 
 def parallel_check_duplicated_images(images_dir: Path) -> list:
     '''
@@ -169,13 +205,16 @@ def parallel_check_duplicated_images(images_dir: Path) -> list:
     :param images_dir: images folder path.
     :return: List of pairs whose pairs contain duplicated images.
     '''
-    assert images_dir.exists(), logging.error(f"{images_dir} not found.")
-
+    try:
+        assert images_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{images_dir} not found.")
+        raise err
     num_processes = int(os.cpu_count())
     pool = Pool(processes=num_processes)
     manager = Manager()
     results_queue = manager.Queue()
-    #for extension in IMAGE_EXTENSION_LIST:
+    # for extension in IMAGE_EXTENSION_LIST:
     img_files = list(images_dir.glob(f'*'))
     num_instances = len(img_files)
     if num_instances != 0:
@@ -186,11 +225,12 @@ def parallel_check_duplicated_images(images_dir: Path) -> list:
         batch = lim_sup
 
         for i in range(num_processes):
-            pool.apply_async(compute_kernel, (img_idxs[lim_inf:lim_sup],img_files, i, results_queue))
+            pool.apply_async(
+                compute_kernel, (img_idxs[lim_inf:lim_sup], img_files, i, results_queue))
             lim_inf = lim_sup
 
             if lim_sup > num_instances:
-                lim_sup = num_instances-1
+                lim_sup = num_instances - 1
             else:
                 lim_sup += batch
     pool.close()
@@ -204,7 +244,6 @@ def parallel_check_duplicated_images(images_dir: Path) -> list:
     return duplicated_images
 
 
-
 def get_images_shapes(images_dir: Path) -> set:
     '''
     Get all image shapes in dataset.
@@ -212,12 +251,17 @@ def get_images_shapes(images_dir: Path) -> set:
     :param images_dir:  images folder
     :return: All shapes in dataset
     '''
-    assert images_dir.exists(), logging.error(f"{images_dir} not found.")
+    try:
+        assert images_dir.exists()
+    except AssertionError as err:
+        logging.error(f"{images_dir} not found.")
+        raise err
 
     shape_list = []
     for extension in IMAGE_EXTENSION_LIST:
         image_list = list(images_dir.glob(f'*{extension}'))
-        shape_list.extend([np.array(Image.open(str(image))).shape for image in image_list])
+        shape_list.extend(
+            [np.array(Image.open(str(image))).shape for image in image_list])
 
     return set(shape_list)
 

@@ -9,16 +9,19 @@ import cv2
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
-
+from pathlib import Path
 from albumentations.pytorch import ToTensorV2
 
 
 plt.style.use('ggplot')
 
 
-# this class keeps track of the training and validation loss values...
-# ... and helps to get the average for each epoch as well
 class Averager:
+    '''
+    This class keeps track of the training and validation loss values
+    and helps to get the average for each epoch as well
+    '''
+
     def __init__(self):
         self.current_total = 0.0
         self.iterations = 0.0
@@ -39,7 +42,7 @@ class Averager:
         self.iterations = 0.0
 
 
-def collate_fn(batch):
+def collate_fn(batch) -> tuple:
     """
     To handle the data loading as different images may have different number
     of objects and to handle varying size tensors as well.
@@ -47,8 +50,12 @@ def collate_fn(batch):
     return tuple(zip(*batch))
 
 
-# define the training tranforms
-def get_train_transform():
+def get_train_transform() -> A.Compose:
+    '''
+    Define the training transforms.
+
+    :return: training transformation
+    '''
     return A.Compose([
         ToTensorV2(p=1.0),
     ], bbox_params={
@@ -57,8 +64,12 @@ def get_train_transform():
     })
 
 
-# define the validation transforms
-def get_valid_transform():
+def get_valid_transform() -> A.Compose:
+    '''
+    Define the validation transforms.
+
+    :return: validation transformation
+    '''
     return A.Compose([
         ToTensorV2(p=1.0),
     ], bbox_params={
@@ -67,8 +78,8 @@ def get_valid_transform():
     })
 
 
-
-def save_model(save_dir, name, epoch, model, optimizer):
+def save_model(save_dir: Path, name: str, epoch: int, model,
+               optimizer: torch.optim.Optimizer) -> None:
     """
     Function to save the trained model till current epoch, or whenever called.
 
@@ -86,7 +97,10 @@ def save_model(save_dir, name, epoch, model, optimizer):
     }, save_dir.joinpath(f"{name}.pth"))
 
 
-def save_train_loss_plot(save_dir, name, train_loss_list):
+def save_train_loss_plot(
+        save_dir: Path,
+        name: str,
+        train_loss_list: list) -> None:
     """
     Function to save both train loss graph.
 
@@ -103,7 +117,7 @@ def save_train_loss_plot(save_dir, name, train_loss_list):
     plt.close('all')
 
 
-def draw_boxes(image, box, color, resize=None):
+def draw_boxes(image, box: list, color, resize=None):
     """
     This function will annotate images with bounding boxes
     based on wether resizing was applied to the image or not.
@@ -137,7 +151,7 @@ def draw_boxes(image, box, color, resize=None):
         return image
 
 
-def put_class_text(image, box, class_name, color, resize=None):
+def put_class_text(image, box, class_name: str, color, resize: tuple = None):
     """
     Annotate the image with class name text.
 

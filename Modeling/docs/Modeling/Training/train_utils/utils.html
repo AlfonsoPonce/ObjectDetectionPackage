@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>Modeling.Training.train_utils.utils API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>Modeling.Training.train_utils.utils</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import datetime
+import errno
+import os
+import time
+from collections import defaultdict, deque
+
+import torch
+import torch.distributed as dist
+
+
+class SmoothedValue:
+    &#34;&#34;&#34;Track a series of values and provide access to smoothed values over a
+    window or the global series average.
+    &#34;&#34;&#34;
+
+    def __init__(self, window_size=20, fmt=None):
+        if fmt is None:
+            fmt = &#34;{median:.4f} ({global_avg:.4f})&#34;
+        self.deque = deque(maxlen=window_size)
+        self.total = 0.0
+        self.count = 0
+        self.fmt = fmt
+
+    def update(self, value, n=1):
+        self.deque.append(value)
+        self.count += n
+        self.total += value * n
+
+    def synchronize_between_processes(self):
+        &#34;&#34;&#34;
+        Warning: does not synchronize the deque!
+        &#34;&#34;&#34;
+        if not is_dist_avail_and_initialized():
+            return
+        t = torch.tensor([self.count, self.total], dtype=torch.float64, device=&#34;cuda&#34;)
+        dist.barrier()
+        dist.all_reduce(t)
+        t = t.tolist()
+        self.count = int(t[0])
+        self.total = t[1]
+
+    @property
+    def median(self):
+        d = torch.tensor(list(self.deque))
+        return d.median().item()
+
+    @property
+    def avg(self):
+        d = torch.tensor(list(self.deque), dtype=torch.float32)
+        return d.mean().item()
+
+    @property
+    def global_avg(self):
+        return self.total / self.count
+
+    @property
+    def max(self):
+        return max(self.deque)
+
+    @property
+    def value(self):
+        return self.deque[-1]
+
+    def __str__(self):
+        return self.fmt.format(
+            median=self.median, avg=self.avg, global_avg=self.global_avg, max=self.max, value=self.value
+        )
+
+
+def all_gather(data):
+    &#34;&#34;&#34;
+    Run all_gather on arbitrary picklable data (not necessarily tensors)
+    Args:
+        data: any picklable object
+    Returns:
+        list[data]: list of data gathered from each rank
+    &#34;&#34;&#34;
+    world_size = get_world_size()
+    if world_size == 1:
+        return [data]
+    data_list = [None] * world_size
+    dist.all_gather_object(data_list, data)
+    return data_list
+
+
+def reduce_dict(input_dict, average=True):
+    &#34;&#34;&#34;
+    Args:
+        input_dict (dict): all the values will be reduced
+        average (bool): whether to do average or sum
+    Reduce the values in the dictionary from all processes so that all processes
+    have the averaged results. Returns a dict with the same fields as
+    input_dict, after reduction.
+    &#34;&#34;&#34;
+    world_size = get_world_size()
+    if world_size &lt; 2:
+        return input_dict
+    with torch.inference_mode():
+        names = []
+        values = []
+        # sort the keys so that they are consistent across processes
+        for k in sorted(input_dict.keys()):
+            names.append(k)
+            values.append(input_dict[k])
+        values = torch.stack(values, dim=0)
+        dist.all_reduce(values)
+        if average:
+            values /= world_size
+        reduced_dict = {k: v for k, v in zip(names, values)}
+    return reduced_dict
+
+
+class MetricLogger:
+    def __init__(self, delimiter=&#34;\t&#34;):
+        self.meters = defaultdict(SmoothedValue)
+        self.delimiter = delimiter
+
+    def update(self, **kwargs):
+        for k, v in kwargs.items():
+            if isinstance(v, torch.Tensor):
+                v = v.item()
+            assert isinstance(v, (float, int))
+            self.meters[k].update(v)
+
+    def __getattr__(self, attr):
+        if attr in self.meters:
+            return self.meters[attr]
+        if attr in self.__dict__:
+            return self.__dict__[attr]
+        raise AttributeError(f&#34;&#39;{type(self).__name__}&#39; object has no attribute &#39;{attr}&#39;&#34;)
+
+    def __str__(self):
+        loss_str = []
+        for name, meter in self.meters.items():
+            loss_str.append(f&#34;{name}: {str(meter)}&#34;)
+        return self.delimiter.join(loss_str)
+
+    def synchronize_between_processes(self):
+        for meter in self.meters.values():
+            meter.synchronize_between_processes()
+
+    def add_meter(self, name, meter):
+        self.meters[name] = meter
+
+    def log_every(self, iterable, print_freq, header=None):
+        i = 0
+        if not header:
+            header = &#34;&#34;
+        start_time = time.time()
+        end = time.time()
+        iter_time = SmoothedValue(fmt=&#34;{avg:.4f}&#34;)
+        data_time = SmoothedValue(fmt=&#34;{avg:.4f}&#34;)
+        space_fmt = &#34;:&#34; + str(len(str(len(iterable)))) + &#34;d&#34;
+        if torch.cuda.is_available():
+            log_msg = self.delimiter.join(
+                [
+                    header,
+                    &#34;[{0&#34; + space_fmt + &#34;}/{1}]&#34;,
+                    &#34;eta: {eta}&#34;,
+                    &#34;{meters}&#34;,
+                    &#34;time: {time}&#34;,
+                    &#34;data: {data}&#34;,
+                    &#34;max mem: {memory:.0f}&#34;,
+                ]
+            )
+        else:
+            log_msg = self.delimiter.join(
+                [header, &#34;[{0&#34; + space_fmt + &#34;}/{1}]&#34;, &#34;eta: {eta}&#34;, &#34;{meters}&#34;, &#34;time: {time}&#34;, &#34;data: {data}&#34;]
+            )
+        MB = 1024.0 * 1024.0
+        for obj in iterable:
+            data_time.update(time.time() - end)
+            yield obj
+            iter_time.update(time.time() - end)
+            if i % print_freq == 0 or i == len(iterable) - 1:
+                eta_seconds = iter_time.global_avg * (len(iterable) - i)
+                eta_string = str(datetime.timedelta(seconds=int(eta_seconds)))
+                if torch.cuda.is_available():
+                    print(
+                        log_msg.format(
+                            i,
+                            len(iterable),
+                            eta=eta_string,
+                            meters=str(self),
+                            time=str(iter_time),
+                            data=str(data_time),
+                            memory=torch.cuda.max_memory_allocated() / MB,
+                        )
+                    )
+                else:
+                    print(
+                        log_msg.format(
+                            i, len(iterable), eta=eta_string, meters=str(self), time=str(iter_time), data=str(data_time)
+                        )
+                    )
+            i += 1
+            end = time.time()
+        total_time = time.time() - start_time
+        total_time_str = str(datetime.timedelta(seconds=int(total_time)))
+        print(f&#34;{header} Total time: {total_time_str} ({total_time / len(iterable):.4f} s / it)&#34;)
+
+
+def collate_fn(batch):
+    return tuple(zip(*batch))
+
+
+def mkdir(path):
+    try:
+        os.makedirs(path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
+
+def setup_for_distributed(is_master):
+    &#34;&#34;&#34;
+    This function disables printing when not in master process
+    &#34;&#34;&#34;
+    import builtins as __builtin__
+
+    builtin_print = __builtin__.print
+
+    def print(*args, **kwargs):
+        force = kwargs.pop(&#34;force&#34;, False)
+        if is_master or force:
+            builtin_print(*args, **kwargs)
+
+    __builtin__.print = print
+
+
+def is_dist_avail_and_initialized():
+    if not dist.is_available():
+        return False
+    if not dist.is_initialized():
+        return False
+    return True
+
+
+def get_world_size():
+    if not is_dist_avail_and_initialized():
+        return 1
+    return dist.get_world_size()
+
+
+def get_rank():
+    if not is_dist_avail_and_initialized():
+        return 0
+    return dist.get_rank()
+
+
+def is_main_process():
+    return get_rank() == 0
+
+
+def save_on_master(*args, **kwargs):
+    if is_main_process():
+        torch.save(*args, **kwargs)
+
+
+def init_distributed_mode(args):
+    if &#34;RANK&#34; in os.environ and &#34;WORLD_SIZE&#34; in os.environ:
+        args.rank = int(os.environ[&#34;RANK&#34;])
+        args.world_size = int(os.environ[&#34;WORLD_SIZE&#34;])
+        args.gpu = int(os.environ[&#34;LOCAL_RANK&#34;])
+    elif &#34;SLURM_PROCID&#34; in os.environ:
+        args.rank = int(os.environ[&#34;SLURM_PROCID&#34;])
+        args.gpu = args.rank % torch.cuda.device_count()
+    else:
+        print(&#34;Not using distributed mode&#34;)
+        args.distributed = False
+        return
+
+    args.distributed = True
+
+    torch.cuda.set_device(args.gpu)
+    args.dist_backend = &#34;nccl&#34;
+    print(f&#34;| distributed init (rank {args.rank}): {args.dist_url}&#34;, flush=True)
+    torch.distributed.init_process_group(
+        backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank
+    )
+    torch.distributed.barrier()
+    setup_for_distributed(args.rank == 0)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="Modeling.Training.train_utils.utils.all_gather"><code class="name flex">
+<span>def <span class="ident">all_gather</span></span>(<span>data)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Run all_gather on arbitrary picklable data (not necessarily tensors)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>data</code></strong></dt>
+<dd>any picklable object</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list[data]</code></dt>
+<dd>list of data gathered from each rank</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def all_gather(data):
+    &#34;&#34;&#34;
+    Run all_gather on arbitrary picklable data (not necessarily tensors)
+    Args:
+        data: any picklable object
+    Returns:
+        list[data]: list of data gathered from each rank
+    &#34;&#34;&#34;
+    world_size = get_world_size()
+    if world_size == 1:
+        return [data]
+    data_list = [None] * world_size
+    dist.all_gather_object(data_list, data)
+    return data_list</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.collate_fn"><code class="name flex">
+<span>def <span class="ident">collate_fn</span></span>(<span>batch)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def collate_fn(batch):
+    return tuple(zip(*batch))</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.get_rank"><code class="name flex">
+<span>def <span class="ident">get_rank</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_rank():
+    if not is_dist_avail_and_initialized():
+        return 0
+    return dist.get_rank()</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.get_world_size"><code class="name flex">
+<span>def <span class="ident">get_world_size</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_world_size():
+    if not is_dist_avail_and_initialized():
+        return 1
+    return dist.get_world_size()</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.init_distributed_mode"><code class="name flex">
+<span>def <span class="ident">init_distributed_mode</span></span>(<span>args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init_distributed_mode(args):
+    if &#34;RANK&#34; in os.environ and &#34;WORLD_SIZE&#34; in os.environ:
+        args.rank = int(os.environ[&#34;RANK&#34;])
+        args.world_size = int(os.environ[&#34;WORLD_SIZE&#34;])
+        args.gpu = int(os.environ[&#34;LOCAL_RANK&#34;])
+    elif &#34;SLURM_PROCID&#34; in os.environ:
+        args.rank = int(os.environ[&#34;SLURM_PROCID&#34;])
+        args.gpu = args.rank % torch.cuda.device_count()
+    else:
+        print(&#34;Not using distributed mode&#34;)
+        args.distributed = False
+        return
+
+    args.distributed = True
+
+    torch.cuda.set_device(args.gpu)
+    args.dist_backend = &#34;nccl&#34;
+    print(f&#34;| distributed init (rank {args.rank}): {args.dist_url}&#34;, flush=True)
+    torch.distributed.init_process_group(
+        backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank
+    )
+    torch.distributed.barrier()
+    setup_for_distributed(args.rank == 0)</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.is_dist_avail_and_initialized"><code class="name flex">
+<span>def <span class="ident">is_dist_avail_and_initialized</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_dist_avail_and_initialized():
+    if not dist.is_available():
+        return False
+    if not dist.is_initialized():
+        return False
+    return True</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.is_main_process"><code class="name flex">
+<span>def <span class="ident">is_main_process</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_main_process():
+    return get_rank() == 0</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.mkdir"><code class="name flex">
+<span>def <span class="ident">mkdir</span></span>(<span>path)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mkdir(path):
+    try:
+        os.makedirs(path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.reduce_dict"><code class="name flex">
+<span>def <span class="ident">reduce_dict</span></span>(<span>input_dict, average=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_dict</code></strong> :&ensp;<code>dict</code></dt>
+<dd>all the values will be reduced</dd>
+<dt><strong><code>average</code></strong> :&ensp;<code>bool</code></dt>
+<dd>whether to do average or sum</dd>
+</dl>
+<p>Reduce the values in the dictionary from all processes so that all processes
+have the averaged results. Returns a dict with the same fields as
+input_dict, after reduction.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reduce_dict(input_dict, average=True):
+    &#34;&#34;&#34;
+    Args:
+        input_dict (dict): all the values will be reduced
+        average (bool): whether to do average or sum
+    Reduce the values in the dictionary from all processes so that all processes
+    have the averaged results. Returns a dict with the same fields as
+    input_dict, after reduction.
+    &#34;&#34;&#34;
+    world_size = get_world_size()
+    if world_size &lt; 2:
+        return input_dict
+    with torch.inference_mode():
+        names = []
+        values = []
+        # sort the keys so that they are consistent across processes
+        for k in sorted(input_dict.keys()):
+            names.append(k)
+            values.append(input_dict[k])
+        values = torch.stack(values, dim=0)
+        dist.all_reduce(values)
+        if average:
+            values /= world_size
+        reduced_dict = {k: v for k, v in zip(names, values)}
+    return reduced_dict</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.save_on_master"><code class="name flex">
+<span>def <span class="ident">save_on_master</span></span>(<span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_on_master(*args, **kwargs):
+    if is_main_process():
+        torch.save(*args, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.setup_for_distributed"><code class="name flex">
+<span>def <span class="ident">setup_for_distributed</span></span>(<span>is_master)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function disables printing when not in master process</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setup_for_distributed(is_master):
+    &#34;&#34;&#34;
+    This function disables printing when not in master process
+    &#34;&#34;&#34;
+    import builtins as __builtin__
+
+    builtin_print = __builtin__.print
+
+    def print(*args, **kwargs):
+        force = kwargs.pop(&#34;force&#34;, False)
+        if is_master or force:
+            builtin_print(*args, **kwargs)
+
+    __builtin__.print = print</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="Modeling.Training.train_utils.utils.MetricLogger"><code class="flex name class">
+<span>class <span class="ident">MetricLogger</span></span>
+<span>(</span><span>delimiter='\t')</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MetricLogger:
+    def __init__(self, delimiter=&#34;\t&#34;):
+        self.meters = defaultdict(SmoothedValue)
+        self.delimiter = delimiter
+
+    def update(self, **kwargs):
+        for k, v in kwargs.items():
+            if isinstance(v, torch.Tensor):
+                v = v.item()
+            assert isinstance(v, (float, int))
+            self.meters[k].update(v)
+
+    def __getattr__(self, attr):
+        if attr in self.meters:
+            return self.meters[attr]
+        if attr in self.__dict__:
+            return self.__dict__[attr]
+        raise AttributeError(f&#34;&#39;{type(self).__name__}&#39; object has no attribute &#39;{attr}&#39;&#34;)
+
+    def __str__(self):
+        loss_str = []
+        for name, meter in self.meters.items():
+            loss_str.append(f&#34;{name}: {str(meter)}&#34;)
+        return self.delimiter.join(loss_str)
+
+    def synchronize_between_processes(self):
+        for meter in self.meters.values():
+            meter.synchronize_between_processes()
+
+    def add_meter(self, name, meter):
+        self.meters[name] = meter
+
+    def log_every(self, iterable, print_freq, header=None):
+        i = 0
+        if not header:
+            header = &#34;&#34;
+        start_time = time.time()
+        end = time.time()
+        iter_time = SmoothedValue(fmt=&#34;{avg:.4f}&#34;)
+        data_time = SmoothedValue(fmt=&#34;{avg:.4f}&#34;)
+        space_fmt = &#34;:&#34; + str(len(str(len(iterable)))) + &#34;d&#34;
+        if torch.cuda.is_available():
+            log_msg = self.delimiter.join(
+                [
+                    header,
+                    &#34;[{0&#34; + space_fmt + &#34;}/{1}]&#34;,
+                    &#34;eta: {eta}&#34;,
+                    &#34;{meters}&#34;,
+                    &#34;time: {time}&#34;,
+                    &#34;data: {data}&#34;,
+                    &#34;max mem: {memory:.0f}&#34;,
+                ]
+            )
+        else:
+            log_msg = self.delimiter.join(
+                [header, &#34;[{0&#34; + space_fmt + &#34;}/{1}]&#34;, &#34;eta: {eta}&#34;, &#34;{meters}&#34;, &#34;time: {time}&#34;, &#34;data: {data}&#34;]
+            )
+        MB = 1024.0 * 1024.0
+        for obj in iterable:
+            data_time.update(time.time() - end)
+            yield obj
+            iter_time.update(time.time() - end)
+            if i % print_freq == 0 or i == len(iterable) - 1:
+                eta_seconds = iter_time.global_avg * (len(iterable) - i)
+                eta_string = str(datetime.timedelta(seconds=int(eta_seconds)))
+                if torch.cuda.is_available():
+                    print(
+                        log_msg.format(
+                            i,
+                            len(iterable),
+                            eta=eta_string,
+                            meters=str(self),
+                            time=str(iter_time),
+                            data=str(data_time),
+                            memory=torch.cuda.max_memory_allocated() / MB,
+                        )
+                    )
+                else:
+                    print(
+                        log_msg.format(
+                            i, len(iterable), eta=eta_string, meters=str(self), time=str(iter_time), data=str(data_time)
+                        )
+                    )
+            i += 1
+            end = time.time()
+        total_time = time.time() - start_time
+        total_time_str = str(datetime.timedelta(seconds=int(total_time)))
+        print(f&#34;{header} Total time: {total_time_str} ({total_time / len(iterable):.4f} s / it)&#34;)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="Modeling.Training.train_utils.utils.MetricLogger.add_meter"><code class="name flex">
+<span>def <span class="ident">add_meter</span></span>(<span>self, name, meter)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_meter(self, name, meter):
+    self.meters[name] = meter</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.MetricLogger.log_every"><code class="name flex">
+<span>def <span class="ident">log_every</span></span>(<span>self, iterable, print_freq, header=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def log_every(self, iterable, print_freq, header=None):
+    i = 0
+    if not header:
+        header = &#34;&#34;
+    start_time = time.time()
+    end = time.time()
+    iter_time = SmoothedValue(fmt=&#34;{avg:.4f}&#34;)
+    data_time = SmoothedValue(fmt=&#34;{avg:.4f}&#34;)
+    space_fmt = &#34;:&#34; + str(len(str(len(iterable)))) + &#34;d&#34;
+    if torch.cuda.is_available():
+        log_msg = self.delimiter.join(
+            [
+                header,
+                &#34;[{0&#34; + space_fmt + &#34;}/{1}]&#34;,
+                &#34;eta: {eta}&#34;,
+                &#34;{meters}&#34;,
+                &#34;time: {time}&#34;,
+                &#34;data: {data}&#34;,
+                &#34;max mem: {memory:.0f}&#34;,
+            ]
+        )
+    else:
+        log_msg = self.delimiter.join(
+            [header, &#34;[{0&#34; + space_fmt + &#34;}/{1}]&#34;, &#34;eta: {eta}&#34;, &#34;{meters}&#34;, &#34;time: {time}&#34;, &#34;data: {data}&#34;]
+        )
+    MB = 1024.0 * 1024.0
+    for obj in iterable:
+        data_time.update(time.time() - end)
+        yield obj
+        iter_time.update(time.time() - end)
+        if i % print_freq == 0 or i == len(iterable) - 1:
+            eta_seconds = iter_time.global_avg * (len(iterable) - i)
+            eta_string = str(datetime.timedelta(seconds=int(eta_seconds)))
+            if torch.cuda.is_available():
+                print(
+                    log_msg.format(
+                        i,
+                        len(iterable),
+                        eta=eta_string,
+                        meters=str(self),
+                        time=str(iter_time),
+                        data=str(data_time),
+                        memory=torch.cuda.max_memory_allocated() / MB,
+                    )
+                )
+            else:
+                print(
+                    log_msg.format(
+                        i, len(iterable), eta=eta_string, meters=str(self), time=str(iter_time), data=str(data_time)
+                    )
+                )
+        i += 1
+        end = time.time()
+    total_time = time.time() - start_time
+    total_time_str = str(datetime.timedelta(seconds=int(total_time)))
+    print(f&#34;{header} Total time: {total_time_str} ({total_time / len(iterable):.4f} s / it)&#34;)</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.MetricLogger.synchronize_between_processes"><code class="name flex">
+<span>def <span class="ident">synchronize_between_processes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def synchronize_between_processes(self):
+    for meter in self.meters.values():
+        meter.synchronize_between_processes()</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.MetricLogger.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(self, **kwargs):
+    for k, v in kwargs.items():
+        if isinstance(v, torch.Tensor):
+            v = v.item()
+        assert isinstance(v, (float, int))
+        self.meters[k].update(v)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.SmoothedValue"><code class="flex name class">
+<span>class <span class="ident">SmoothedValue</span></span>
+<span>(</span><span>window_size=20, fmt=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Track a series of values and provide access to smoothed values over a
+window or the global series average.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SmoothedValue:
+    &#34;&#34;&#34;Track a series of values and provide access to smoothed values over a
+    window or the global series average.
+    &#34;&#34;&#34;
+
+    def __init__(self, window_size=20, fmt=None):
+        if fmt is None:
+            fmt = &#34;{median:.4f} ({global_avg:.4f})&#34;
+        self.deque = deque(maxlen=window_size)
+        self.total = 0.0
+        self.count = 0
+        self.fmt = fmt
+
+    def update(self, value, n=1):
+        self.deque.append(value)
+        self.count += n
+        self.total += value * n
+
+    def synchronize_between_processes(self):
+        &#34;&#34;&#34;
+        Warning: does not synchronize the deque!
+        &#34;&#34;&#34;
+        if not is_dist_avail_and_initialized():
+            return
+        t = torch.tensor([self.count, self.total], dtype=torch.float64, device=&#34;cuda&#34;)
+        dist.barrier()
+        dist.all_reduce(t)
+        t = t.tolist()
+        self.count = int(t[0])
+        self.total = t[1]
+
+    @property
+    def median(self):
+        d = torch.tensor(list(self.deque))
+        return d.median().item()
+
+    @property
+    def avg(self):
+        d = torch.tensor(list(self.deque), dtype=torch.float32)
+        return d.mean().item()
+
+    @property
+    def global_avg(self):
+        return self.total / self.count
+
+    @property
+    def max(self):
+        return max(self.deque)
+
+    @property
+    def value(self):
+        return self.deque[-1]
+
+    def __str__(self):
+        return self.fmt.format(
+            median=self.median, avg=self.avg, global_avg=self.global_avg, max=self.max, value=self.value
+        )</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="Modeling.Training.train_utils.utils.SmoothedValue.avg"><code class="name">var <span class="ident">avg</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def avg(self):
+    d = torch.tensor(list(self.deque), dtype=torch.float32)
+    return d.mean().item()</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.SmoothedValue.global_avg"><code class="name">var <span class="ident">global_avg</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def global_avg(self):
+    return self.total / self.count</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.SmoothedValue.max"><code class="name">var <span class="ident">max</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def max(self):
+    return max(self.deque)</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.SmoothedValue.median"><code class="name">var <span class="ident">median</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def median(self):
+    d = torch.tensor(list(self.deque))
+    return d.median().item()</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.SmoothedValue.value"><code class="name">var <span class="ident">value</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def value(self):
+    return self.deque[-1]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="Modeling.Training.train_utils.utils.SmoothedValue.synchronize_between_processes"><code class="name flex">
+<span>def <span class="ident">synchronize_between_processes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Warning: does not synchronize the deque!</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def synchronize_between_processes(self):
+    &#34;&#34;&#34;
+    Warning: does not synchronize the deque!
+    &#34;&#34;&#34;
+    if not is_dist_avail_and_initialized():
+        return
+    t = torch.tensor([self.count, self.total], dtype=torch.float64, device=&#34;cuda&#34;)
+    dist.barrier()
+    dist.all_reduce(t)
+    t = t.tolist()
+    self.count = int(t[0])
+    self.total = t[1]</code></pre>
+</details>
+</dd>
+<dt id="Modeling.Training.train_utils.utils.SmoothedValue.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, value, n=1)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(self, value, n=1):
+    self.deque.append(value)
+    self.count += n
+    self.total += value * n</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="Modeling.Training.train_utils" href="index.html">Modeling.Training.train_utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="Modeling.Training.train_utils.utils.all_gather" href="#Modeling.Training.train_utils.utils.all_gather">all_gather</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.collate_fn" href="#Modeling.Training.train_utils.utils.collate_fn">collate_fn</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.get_rank" href="#Modeling.Training.train_utils.utils.get_rank">get_rank</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.get_world_size" href="#Modeling.Training.train_utils.utils.get_world_size">get_world_size</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.init_distributed_mode" href="#Modeling.Training.train_utils.utils.init_distributed_mode">init_distributed_mode</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.is_dist_avail_and_initialized" href="#Modeling.Training.train_utils.utils.is_dist_avail_and_initialized">is_dist_avail_and_initialized</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.is_main_process" href="#Modeling.Training.train_utils.utils.is_main_process">is_main_process</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.mkdir" href="#Modeling.Training.train_utils.utils.mkdir">mkdir</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.reduce_dict" href="#Modeling.Training.train_utils.utils.reduce_dict">reduce_dict</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.save_on_master" href="#Modeling.Training.train_utils.utils.save_on_master">save_on_master</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.setup_for_distributed" href="#Modeling.Training.train_utils.utils.setup_for_distributed">setup_for_distributed</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="Modeling.Training.train_utils.utils.MetricLogger" href="#Modeling.Training.train_utils.utils.MetricLogger">MetricLogger</a></code></h4>
+<ul class="">
+<li><code><a title="Modeling.Training.train_utils.utils.MetricLogger.add_meter" href="#Modeling.Training.train_utils.utils.MetricLogger.add_meter">add_meter</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.MetricLogger.log_every" href="#Modeling.Training.train_utils.utils.MetricLogger.log_every">log_every</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.MetricLogger.synchronize_between_processes" href="#Modeling.Training.train_utils.utils.MetricLogger.synchronize_between_processes">synchronize_between_processes</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.MetricLogger.update" href="#Modeling.Training.train_utils.utils.MetricLogger.update">update</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="Modeling.Training.train_utils.utils.SmoothedValue" href="#Modeling.Training.train_utils.utils.SmoothedValue">SmoothedValue</a></code></h4>
+<ul class="">
+<li><code><a title="Modeling.Training.train_utils.utils.SmoothedValue.avg" href="#Modeling.Training.train_utils.utils.SmoothedValue.avg">avg</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.SmoothedValue.global_avg" href="#Modeling.Training.train_utils.utils.SmoothedValue.global_avg">global_avg</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.SmoothedValue.max" href="#Modeling.Training.train_utils.utils.SmoothedValue.max">max</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.SmoothedValue.median" href="#Modeling.Training.train_utils.utils.SmoothedValue.median">median</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.SmoothedValue.synchronize_between_processes" href="#Modeling.Training.train_utils.utils.SmoothedValue.synchronize_between_processes">synchronize_between_processes</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.SmoothedValue.update" href="#Modeling.Training.train_utils.utils.SmoothedValue.update">update</a></code></li>
+<li><code><a title="Modeling.Training.train_utils.utils.SmoothedValue.value" href="#Modeling.Training.train_utils.utils.SmoothedValue.value">value</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

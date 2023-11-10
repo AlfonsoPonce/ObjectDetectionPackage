@@ -16,7 +16,7 @@ As soon as possible, an in-depth document will be released in order to clarify
 all doubts. The main goal of this README is to clarify the module's usage.
 
 # :warning: IMPORTANT CONSIDERATION :warning:
-Images and labels path must be written in absolute paths. 
+Images, labels and augmentations file path must be written in absolute paths. 
 
 # About label conversion :curly_loop:
 ## What kinds of label conversions are allowed? :thinking:

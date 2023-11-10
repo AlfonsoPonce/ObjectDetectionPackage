@@ -37,3 +37,12 @@ Each option has it's own MLproject file where parameters are described. Besides,
 is being developed in order to give further details on each module separatedly.
 
 The file `config.yaml` contains the parameters each of the module requires.
+
+## Considerations
+
+- Latex compiler is required in order to use pylatex for report generation.
+- Need of a WandB account in order to log and get artifacts.
+- Currently it a pipeline is not implemented, every module must be excuted
+  separatedly, so `steps` parameter can just contain one value.
+- Check for log files in order to see full trace, do not be guided by
+  stdout.

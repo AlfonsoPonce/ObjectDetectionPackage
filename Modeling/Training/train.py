@@ -16,16 +16,22 @@ from .custom_utils import (
 import torch
 
 
-#if __name__ == '__main__':
-def train(model, train_config_dict: dict, train_loader , valid_loader, output_dir:Path):
+# if __name__ == '__main__':
+def train(
+        model,
+        train_config_dict: dict,
+        train_loader,
+        valid_loader,
+        output_dir: Path) -> tuple:
     '''
-    Function that implements model training
+    Function that implements model training.
+
     :param model: torch detection model
     :param train_config_dict: configuration training dictionary
     :param train_loader: torch train dataloader
     :param valid_loader: torch valid dataloader
     :param output_dir: Path where trained model will be stored
-    :return:
+    :return: Best and last metrics.
     '''
 
     assert isinstance(train_config_dict['optimizer'], torch.optim.Optimizer)
@@ -39,7 +45,6 @@ def train(model, train_config_dict: dict, train_loader , valid_loader, output_di
     # Train and validation loss lists to store loss values of all
     # iterations till ena and plot graphs for all iterations.
     train_loss_list = []
-
 
     if torch.cuda.is_available():
         device = 'cuda'
@@ -61,8 +66,6 @@ def train(model, train_config_dict: dict, train_loader , valid_loader, output_di
     scheduler = train_config_dict['scheduler']
     num_epochs = train_config_dict['epochs']
     BEST_MAP = (0, 0)
-
-
 
     for epoch in range(num_epochs):
         train_loss_hist.reset()
@@ -96,14 +99,18 @@ def train(model, train_config_dict: dict, train_loader , valid_loader, output_di
         save_model(output_dir, f'LAST_{model_name}', epoch, model, optimizer)
 
         if map_05_095 > BEST_MAP[1]:
-            save_model(output_dir, f'BEST_{model_name}', epoch, model, optimizer)
+            save_model(
+                output_dir,
+                f'BEST_{model_name}',
+                epoch,
+                model,
+                optimizer)
             BEST_MAP = (map_05, map_05_095)
-
 
         # Save loss plot.
         save_train_loss_plot(output_dir, model_name, train_loss_list)
 
-    #shutil.copyfile("config_file.json", out + f"/config_file.json")
+    # shutil.copyfile("config_file.json", out + f"/config_file.json")
 
     LAST_MAP = (cocoEval.stats[1].item(), cocoEval.stats[0].item())
 

@@ -9,13 +9,15 @@ from Modeling.Model_Zoo.Zoo import Zoo
 import torch
 from Modeling.Inference.video_inference import local_video_inference
 from pathlib import Path
+
+
 def run(args):
     if torch.cuda.is_available():
         device = 'cuda'
     else:
         device = 'cpu'
 
-    model_repo = Zoo(len(args['classes'])+2)
+    model_repo = Zoo(len(args['classes']) + 2)
     model = model_repo.get_model(args['model_name'])
     checkpoint = torch.load(args['model_checkpoint'], map_location=device)
     model.load_state_dict(checkpoint['model_state_dict'])
@@ -27,7 +29,6 @@ def run(args):
                           args['detection_threshold'],
                           device,
                           args['resize'])
-
 
 
 if __name__ == '__main__':

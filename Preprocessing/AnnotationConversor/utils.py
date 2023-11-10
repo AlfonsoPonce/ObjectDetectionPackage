@@ -4,6 +4,7 @@ Author: Alfonso Ponce Navarro
 Date: 31/10/2023
 '''
 
+
 def xml_to_yolo_bbox(bbox, w, h) -> list:
     '''
     Converts PASCAL_VOC Bboxes to YOLO ones.
@@ -19,6 +20,7 @@ def xml_to_yolo_bbox(bbox, w, h) -> list:
     width = (bbox[2] - bbox[0]) / w
     height = (bbox[3] - bbox[1]) / h
     return [x_center, y_center, width, height]
+
 
 def yolo_to_xml_bbox(bbox, w, h) -> list:
     '''
@@ -38,7 +40,9 @@ def yolo_to_xml_bbox(bbox, w, h) -> list:
     ymax = int((bbox[1] * h) + h_half_len)
     return [xmin, ymin, xmax, ymax]
 
-## converts the normalized positions  into integer positions
+# converts the normalized positions  into integer positions
+
+
 def unconvert(class_id, width, height, x, y, w, h) -> tuple:
     '''
     Converts the normalized positions into integer positions.

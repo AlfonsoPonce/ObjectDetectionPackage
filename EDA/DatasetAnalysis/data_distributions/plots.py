@@ -8,6 +8,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 
+
 def plot_histogram(ocurrence_list: list, file_name: str) -> None:
     '''
     Plots histogram of classes given a list of class appearances.
@@ -23,6 +24,7 @@ def plot_histogram(ocurrence_list: list, file_name: str) -> None:
         logging.error(f'{str(error)}')
         raise error
 
+
 def plot_pie(distribution_dict: dict) -> None:
     '''
     Plots pie chart of a given distribution dictionary.
@@ -33,9 +35,8 @@ def plot_pie(distribution_dict: dict) -> None:
     labels = list(distribution_dict.keys())
     try:
         plt.title("General Size Distribution")
-        plt.pie(data, labels=labels,  autopct='%.0f%%')
+        plt.pie(data, labels=labels, autopct='%.0f%%')
         plt.savefig("./Piechart")
     except Exception as error:
         logging.error(f'{str(error)}')
         raise error
-
