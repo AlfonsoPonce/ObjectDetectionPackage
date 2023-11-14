@@ -28,11 +28,6 @@ entry_points:
                 type: str
                 required: True
 
-            batch_size:
-                description: Batch_size
-                type: str
-                required: True
-
             train_split:
                 description: Ratio of training instances
                 type: str
@@ -65,13 +60,94 @@ entry_points:
 
 
 
-        command: "python main.py --dataset_format {dataset_format}
+        command: "python main_train.py --dataset_format {dataset_format}
                                 --class_list {class_list} --images_dir {images_dir}
                                 --labels_dir {labels_dir} --output_dir {output_dir}
-                                --batch_size {batch_size} --train_split {train_split}
+                                --train_split {train_split}
                                 --model {model} --artifact_name {artifact_name}
                                 --artifact_type {artifact_type}
                                 --artifact_description {artifact_description}
                                 --train_config {train_config}
+                                "
+    model_selection:
+        parameters:
 
+            images_dir:
+                description: Folder where images are stored
+                type: str
+                required: True
+
+            labels_dir:
+                description: Folder where labels are stored
+                type: str
+                required: True
+
+            dataset_format:
+                description: Label format. It can be VOC, COCO or YOLO
+                type: str
+                required: True
+
+            class_list:
+                description: List of classes to detect. E.g. --class_list Class1,Class2,...,ClassN
+                type: str
+                required: True
+
+            train_config:
+                description: Training configuration dictionary. Must be given a string formatted with json.
+                type: str
+                required: True
+
+            output_dir:
+                description: Output directory for results
+                type: str
+                required: True
+
+            model_list:
+                description: Comma-separated list (no whitespaces) of models to be compared. Each model name must be the name of the file under model_repo (without file extension)
+                type: str
+                required: True
+
+            metric_criteria:
+                description: Selects which metric will be used to perform comparison
+                type: str
+                required: True
+
+            K:
+                description: Selects K for K_Crossvalidation if applied.
+                type: str
+
+
+            selection_method:
+                description: Method to perform model comparison and selection. If more than two models are listed, and pairwise comparison method is specified, then it will perform all possible comparisons.
+                type: str
+                required: True
+
+            hypothesis_test:
+                description: Hypothesis test to perform model comparison.
+                type: str
+                required: True
+
+            artifact_name:
+                description: Name of the artifact.
+                type: str
+                required: True
+
+            artifact_type:
+                description: Type of the artifact.
+                type: str
+                required: True
+
+            artifact_description:
+                description: A brief description of this artifact.
+                type: str
+                required: True
+        command: "python main_model_selection.py --dataset_format {dataset_format}
+                                --class_list {class_list} --images_dir {images_dir}
+                                --labels_dir {labels_dir} --output_dir {output_dir}
+                                --metric_criteria {metric_criteria} --K {K}
+                                --selection_method {selection_method} --hypothesis_test {hypothesis_test}
+                                --model_list {model_list} --artifact_name {artifact_name}
+                                --artifact_type {artifact_type}
+                                --artifact_description {artifact_description}
+                                --train_config {train_config}
                                 "

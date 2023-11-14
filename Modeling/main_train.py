@@ -62,6 +62,7 @@ def run(args):
             args.labels_dir).joinpath(
             file.with_suffix(extension).name) for file in valid_images_list]
 
+    train_config_dict = json.loads(args.train_config.replace('\'', '\"'))
 
     train_dataset = PascalDataset(
         train_images_list,
@@ -76,19 +77,17 @@ def run(args):
 
 
     train_dataloader = DataLoader(train_dataset,
-                                  batch_size=args.batch_size,
+                                  batch_size=train_config_dict["batch_size"],
                                   collate_fn=collate_fn)
     valid_dataloader = DataLoader(
         valid_dataset,
-        batch_size=args.batch_size,
+        batch_size=train_config_dict["batch_size"],
         collate_fn=collate_fn)
 
     logging.info("Getting model from repo...")
     pretrained_models = Zoo(len(args.class_list.split(',')))
     model = pretrained_models.get_model(args.model)
 
-
-    train_config_dict = json.loads(args.train_config.replace('\'', '\"'))
 
     optimizer_name = train_config_dict['optimizer']['name']
     optimizer_params = train_config_dict['optimizer']['params']
@@ -128,7 +127,7 @@ def run(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Module to perform model training, optimization, testing...')
+        description='Module to perform model training')
 
     parser.add_argument(
         '--dataset_format',
@@ -163,9 +162,6 @@ if __name__ == '__main__':
         type=str,
         help='Output directory for results',
         required=True)
-
-    parser.add_argument('--batch_size', type=int, help='Batch size',
-                        required=True)
 
     parser.add_argument(
         "--train_split",

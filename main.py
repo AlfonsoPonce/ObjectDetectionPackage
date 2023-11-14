@@ -84,7 +84,7 @@ def run(config: DictConfig):
                     working_directory.joinpath(config["MODELING"]["labels_dir"])),
                 'output_dir': str(
                     working_directory.joinpath(config["MODELING"]["output_dir"])),
-                'batch_size': config["MODELING"]["batch_size"],
+                'batch_size': config["MODELING"]["train_config"]["batch_size"],
                 'train_split': config["MODELING"]["train_split"],
                 'model': config["MODELING"]["model"],
                 'train_config': str(OmegaConf.to_container(config["MODELING"]["train_config"])).replace(" ", ""),

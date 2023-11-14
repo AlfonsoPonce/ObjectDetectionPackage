@@ -45,10 +45,10 @@ MODELING:
   images_dir: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\images
   labels_dir: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\labels
   output_dir: ./model_output
-  batch_size: 1
   train_split: 0.8
   model: fasterrcnn_resnet50
   train_config:
+    batch_size: 1
     optimizer:
       name: SGD
       params:

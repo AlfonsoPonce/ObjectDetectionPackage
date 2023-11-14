@@ -8,7 +8,7 @@ Tested python versions:
 # Setup
 First things first, the command to install all packages and dependencies is shown below:
 
-`pip install requirements.txt`
+`pip install -r requirements.txt`
 
 ## :warning: Torch version
 Probably, your pytorch version may differ from the one used when developing the package due to
