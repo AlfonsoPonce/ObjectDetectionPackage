@@ -61,7 +61,7 @@ def run(config: DictConfig):
                 'augmentations': config["PREPROCESSING"]["AUGMENTATIONS"]["perform"],
                 'image_directory': str(working_directory.joinpath(config["PREPROCESSING"]["AUGMENTATIONS"]["image_directory"])),
                 'labels_directory': str(working_directory.joinpath(config["PREPROCESSING"]["AUGMENTATIONS"]["labels_directory"])),
-                'augmentation_file': str(working_directory.joinpath(config["PREPROCESSING"]["AUGMENTATIONS"]["augmentations_file"])),
+                'augmentation_file': str(working_directory.joinpath('Preprocessing','Augmentations','transformations',config["PREPROCESSING"]["AUGMENTATIONS"]["augmentations_file"])),
                 'augmentations_artifact_name': config["PREPROCESSING"]["AUGMENTATIONS"]["artifact_name"],
                 'augmentations_artifact_type': config["PREPROCESSING"]["AUGMENTATIONS"]["artifact_type"],
                 'augmentations_artifact_description': config["PREPROCESSING"]["AUGMENTATIONS"]["artifact_description"]

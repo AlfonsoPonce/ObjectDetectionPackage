@@ -21,7 +21,7 @@ PREPROCESSING:
   class_list: goalkeeper,player,ball,referee
 
   ANNOTATION_CONVERSOR:
-    perform: True
+    perform: False
     src_label_format: VOC
     dst_label_format: COCO
     input_label_dir: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\labels
@@ -31,10 +31,10 @@ PREPROCESSING:
     artifact_description: COCO_Annotations_for_footballer_detection
 
   AUGMENTATIONS:
-    perform: False
+    perform: True
     image_directory: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\images
     labels_directory: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\labels
-    augmentations_file: ./transformations/RandomRain.yml
+    augmentations_file: RandomRain.yml
     artifact_name: augmentations
     artifact_type: augmentations_result
     artifact_description: Augmentation_file_used_And_result
