@@ -59,7 +59,6 @@ def perform_augmentations(
     # list_dir = os.listdir(image_directory)
 
     list_dir = list(image_directory.glob('*'))
-
     num_cpus = multiprocessing.cpu_count()
     pool = Pool(int(num_cpus / 2))
     lim_inf = 0
@@ -67,17 +66,19 @@ def perform_augmentations(
     batch = lim_sup
 
     for i in range(num_cpus):
+
         pool.apply_async(compute_kernel,
                          args=(image_directory,
                                labels_directory,
+                               augmentations_file.stem,
                                class_list,
                                list_dir[lim_inf:lim_sup],
                                transforms,
                                Augmented_Image_Dir,
                                Augmented_Labels_Dir))
-        lim_inf = (lim_sup + 1)
-        if math.fabs(lim_sup - len(list_dir)) < batch:
-            lim_sup += int(math.fabs(lim_sup - len(list_dir)))
+        lim_inf = lim_sup
+        if lim_sup > len(list_dir):
+            lim_sup = len(list_dir) - 1
         else:
             lim_sup += batch
 
@@ -88,6 +89,7 @@ def perform_augmentations(
 def compute_kernel(
         image_directory: Path,
         labels_directory: Path,
+        transform_name: str,
         class_list: list,
         list_dir: list,
         transforms: object,
@@ -98,6 +100,7 @@ def compute_kernel(
 
     :param image_directory: Directory to fetch images.
     :param labels_directory: Directory to fetch labels.
+    :param transform_name: Name of the transformation applied.
     :param class_list: list of classes
     :param list_dir: list of images to augment
     :param transforms: Albumentations object that performs augmentation
@@ -114,16 +117,17 @@ def compute_kernel(
                 image_file.name.replace(image_file.suffix, '.xml'))
 
             image = np.array(Image.open(str(image_file)))
+
             if image is not None:
                 # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
                 bboxes, labels = read_pascal_bboxes(
-                    image, label_file, class_list)
+                    label_file, class_list)
 
                 for x in range(len(labels)):
                     labels[x] = class_list[labels[x]]
 
                 try:
+
                     transformed = transforms(
                         image=image, bboxes=bboxes, class_labels=labels)
 
@@ -132,14 +136,15 @@ def compute_kernel(
                     transformed_bboxes = transformed['bboxes']
 
                     # cv2.imwrite(str(Augmented_Image_Dir.joinpath(str(list_dir2[i]) + ".jpg")), cv2.cvtColor(transformed_image, cv2.COLOR_BGR2RGB))
+
                     transformed_image.save(
-                        str(Augmented_Image_Dir.joinpath(image_file.name)))
+                        str(Augmented_Image_Dir.joinpath(f"{transform_name}_{image_file.name}")))
 
                     if transforms.get_dict_with_id(
                     )['bbox_params']['format'] == 'pascal_voc':
 
                         writer = Writer(str(image_directory.joinpath(
-                            image_file.name)), transformed_image.width, transformed_image.height)
+                            f"{transform_name}_{image_file.name}")), transformed_image.width, transformed_image.height)
 
                         for x in range(len(transformed_class_labels)):
                             xmin = transformed_bboxes[x][0]
@@ -151,13 +156,13 @@ def compute_kernel(
                                 xmin), int(ymin), int(xmax), int(ymax))
                         print(image_file)
                         writer.save(
-                            str(Augmented_Labels_Dir.joinpath(image_file.stem + ".xml")))
+                            str(Augmented_Labels_Dir.joinpath(f"{transform_name}_{image_file.stem}.xml")))
                     print("Image" +
                           str(list_dir2[i]) +
                           ".png processed and saved")
 
                 except Exception as e:
-                    # print(e)
+                    print(e)
                     raise
                 i += 1
 

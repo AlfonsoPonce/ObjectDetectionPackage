@@ -35,6 +35,7 @@ PREPROCESSING:
     image_directory: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\images
     labels_directory: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\labels
     augmentations_file: RandomRain.yml
+    merge_augmented_images: True
     artifact_name: augmentations
     artifact_type: augmentations_result
     artifact_description: Augmentation_file_used_And_result
