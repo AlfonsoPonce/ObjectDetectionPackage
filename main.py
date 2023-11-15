@@ -7,10 +7,10 @@ import json
 
 _steps = [
     "EDA",
-    "Preprocessing",
-    "Modeling",
-    "Inference",
-    "Deploy"
+    "PREPROCESSING",
+    "MODELING",
+    "INFERENCE",
+    "DEPLOY"
 ]
 
 @hydra.main(config_name='config')

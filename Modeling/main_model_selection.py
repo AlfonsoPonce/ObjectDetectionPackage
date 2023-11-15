@@ -5,6 +5,8 @@ from pathlib import Path
 from Model_Selection.selection_methods import k_fold_cross_validation
 from Model_Selection.comparison_methods import pairwise_ttest
 from Model_Zoo.Zoo import Zoo
+import numpy as np
+import itertools
 import json
 
 def run(args):
@@ -50,9 +52,21 @@ def run(args):
 
     if args.hypothesis_test.upper == "PAIRWISE_TTEST":
         if len(models_results_list) == 2:
-            pairwise_ttest(models_results_list[0], models_results_list[1])
+            pairwise_ttest(models_results_list[0], models_results_list[1], float(args.significance_level))
         elif len(models_results_list) > 2:
-            #TODO apply multiple pairwise tests with correction
+
+            models_results_list = [np.array(individual_model_results) for individual_model_results in models_results_list]
+
+            index_combinations_list = list(itertools.combinations(range(len(models_results_list)), 2))
+
+            # Currently it will only be applied Bonferroni correction.
+            num_tests = len(index_combinations_list)
+            corrected_significance_level = float(args.significance_level) / num_tests
+            for i, j in index_combinations_list:
+                model_1 = models_results_list[i]
+                model_2 = models_results_list[j]
+
+                pairwise_ttest(model_1, model_2, corrected_significance_level)
 
 
 
@@ -107,6 +121,8 @@ if __name__ == '__main__':
                                                              'then it will perform all possible comparisons.', required=True,
                         choices=['K_Crossval'])
     parser.add_argument('--hypothesis_test', type=str, help='Hypothesis test to perform model comparison.', required=True)
+    parser.add_argument('--significance_level', type=str, help='Significance level to execute hypothesis testing. Must be between [0-1)',
+                        required=True)
 
     parser.add_argument(
         "--artifact_name",

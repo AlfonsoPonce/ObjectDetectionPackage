@@ -127,6 +127,12 @@ entry_points:
                 type: str
                 required: True
 
+            significance_level:
+                description: Significance level to execute hypothesis testing. Must be between [0-1)
+                type: str
+                required: True
+
+
             artifact_name:
                 description: Name of the artifact.
                 type: str
