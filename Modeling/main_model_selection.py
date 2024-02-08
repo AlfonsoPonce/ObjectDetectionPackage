@@ -42,17 +42,26 @@ def run(args):
     pretrained_models = Zoo(len(args.class_list.split(',')))
     train_config_dict = json.loads(args.train_config.replace('\'', '\"'))
     models_results_list = []
+
+
+
     if args.selection_method.upper() == 'K_CROSSVAL':
         for curr_model in args.model_list.split(','):
             model = pretrained_models.get_model(curr_model)
 
             curr_result_list = k_fold_cross_validation(int(args.K), model, train_config_dict, args.class_list.split(','), Path(args.images_dir), Path(args.labels_dir), Path(args.output_dir))
             models_results_list.append(curr_result_list)
+            print(models_results_list)
 
 
-    if args.hypothesis_test.upper == "PAIRWISE_TTEST":
+    if args.hypothesis_test.upper() == "PAIRWISE_TTEST":
         if len(models_results_list) == 2:
-            pairwise_ttest(models_results_list[0], models_results_list[1], float(args.significance_level))
+            significance_diff = pairwise_ttest(models_results_list[0], models_results_list[1], float(args.significance_level))
+            print(f"Significance difference between models: {significance_diff}")
+            print(f"MAP Model 1: {models_results_list[0]}")
+            print(f"MAP Model 2: {models_results_list[1]}")
+
+
         elif len(models_results_list) > 2:
 
             models_results_list = [np.array(individual_model_results) for individual_model_results in models_results_list]
@@ -111,10 +120,13 @@ if __name__ == '__main__':
         help='Output directory for results',
         required=True)
 
+
+    parser.add_argument('--metric_criteria', type=str, help='Selects which metric will be used to perform comparison',
+                         required=True, choices=['MAP', 'F1SCORE'])
+    parser.add_argument('--K', type=str, help='Selects K for K_Crossvalidation if applied.', required=True)
     parser.add_argument('--model_list', type=str, help='Comma-separated list (no whitespaces) of models to be compared.'
                                                        'Each model name must be the name of the file under model_repo (without file extension)', required=True)
-    parser.add_argument('--metric_critera', type=str, help='Selects which metric will be used to perform comparison', required=True, choices=['MAP'])
-    parser.add_argument('--K', type=str, help='Selects K for K_Crossvalidation if applied.')
+
 
     parser.add_argument('--selection_method', type=str, help='Method to perform model comparison and selection. If more than'
                                                              'two models are listed, and `pairwise comparison method is specified,'

@@ -86,7 +86,7 @@ def run(args):
 
     logging.info("Getting model from repo...")
     pretrained_models = Zoo(len(args.class_list.split(',')))
-    model = pretrained_models.get_model(args.model)
+    model = pretrained_models.get_model(args.model, True)
 
 
     optimizer_name = train_config_dict['optimizer']['name']

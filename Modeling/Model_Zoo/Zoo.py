@@ -19,22 +19,23 @@ class Zoo():
         # add background class
         self.num_classes = num_classes + 1
 
-    def get_model(self, name: str):
+    def get_model(self, name: str, new_head: bool):
         '''
         Function to select detection model
         :param name: name of the model to be used. The name must be the same as the filename in model_repo/ folder.
+        :param new_head: If True, then the pretrained head is replaced by a not trained one.
         :return: torch object detection.
         '''
         model = None
         if name == 'fasterrcnn_resnet50':
-            model = fasterrcnn_resnet50.create_model(self.num_classes)
+            model = fasterrcnn_resnet50.create_model(self.num_classes, new_head)
 
         elif name == 'fasterrcnn_mobilenetv3_large_fpn':
             model = fasterrcnn_mobilenetv3_large_fpn.create_model(
                 self.num_classes)
 
         elif name == 'fcos_resnet_50fpn':
-            model = fcos_resnet_50fpn.create_model(self.num_classes)
+            model = fcos_resnet_50fpn.create_model(self.num_classes, new_head)
 
         elif name == 'retinanet_resnet_50fpn':
             model = retinanet_resnet50_fpn.create_model(self.num_classes)

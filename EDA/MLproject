@@ -30,3 +30,29 @@ entry_points:
                                  --plots_output_dir {plots_output_dir} --report_save_dir {report_save_dir}
                                  --artifact_name {artifact_name}  --artifact_type {artifact_type} --artifact_description {artifact_description}
 
+    main_visualizer:
+        parameters:
+            dataset_format:
+                description: Format of dataset, allowed values are [VOC, YOLO, COCO]
+                type: str
+            root_input_dir:
+                description: Root path of folder where images and labels subfolders are stored.
+                type: str
+            root_output_dir:
+                description: Root path of folder where annotated images will be shown.
+                type: str
+            artifact_name:
+                description: Name of the artifact
+                type: str
+            artifact_type:
+                description: Type of the artifact
+                type: str
+            artifact_description:
+                description: A brief description of this artifact
+                type: str
+
+        command: python main_visualizer.py --dataset_format {dataset_format}
+                                           --root_input_dir {root_input_dir}
+                                           --root_output_dir {root_output_dir}
+                                           --artifact_name {artifact_name}  --artifact_type {artifact_type}
+                                           --artifact_description {artifact_description}

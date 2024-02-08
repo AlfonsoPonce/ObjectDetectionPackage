@@ -110,3 +110,59 @@ entry_points:
                                 --augmentations_artifact_description {augmentations_artifact_description}
                                 "
 
+    extra_preprocessing:
+        parameters:
+            type:
+                description: Type of extra preprocessing steps
+                type: str
+                choices: remove_extra_labels, rename_labels, erase_images_with_empty_labels
+                required: True
+
+            image_directory:
+                description: Path where images are stored.
+                type: str
+                required: True
+
+            labels_directory:
+                description: Path where labels are stored.
+                type: str
+                required: True
+
+            labels_to_maintain:
+                description: comma separated list of labels to keep. The rest will be removed.
+                type: str
+                required: True
+
+            current_labels_list:
+                description: comma separated list of current labels to be renamed.
+                type: str
+                required: True
+
+            target_labels_list:
+                description: comma separated list of new labels.
+                type: str
+                required: True
+
+            artifact_name:
+                description: Name of the artifact.
+                type: str
+                required: True
+
+            artifact_type:
+                description: Type of the artifact.
+                type: str
+                required: True
+
+            artifact_description:
+                description: A brief description of this artifact.
+                type: str
+                required: True
+
+        command: "python main_extra_preprocessing.py --type {type}
+                  --image_directory {image_directory} --labels_directory {labels_directory}
+                  --labels_to_maintain {labels_to_maintain}
+                  --current_labels_list {current_labels_list}
+                  --target_labels_list {target_labels_list}
+                  --artifact_name {artifact_name} --artifact_type {artifact_type}
+                  --artifact_description {artifact_description}"
+

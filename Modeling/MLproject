@@ -115,6 +115,7 @@ entry_points:
             K:
                 description: Selects K for K_Crossvalidation if applied.
                 type: str
+                required: True
 
 
             selection_method:
@@ -151,9 +152,69 @@ entry_points:
                                 --class_list {class_list} --images_dir {images_dir}
                                 --labels_dir {labels_dir} --output_dir {output_dir}
                                 --metric_criteria {metric_criteria} --K {K}
+                                --significance_level {significance_level}
                                 --selection_method {selection_method} --hypothesis_test {hypothesis_test}
                                 --model_list {model_list} --artifact_name {artifact_name}
                                 --artifact_type {artifact_type}
                                 --artifact_description {artifact_description}
                                 --train_config {train_config}
                                 "
+
+    inference:
+        parameters:
+            inference_type:
+                description: Type of data which inference will be done.
+                type: str
+                choices: video, dataset
+                required: True
+
+            input_folder:
+                description: Folder where input data is stored.
+                type: str
+                required: True
+
+            output_folder:
+                description: Folder output data will be stored
+                type: str
+                required: True
+
+            model_name:
+                description: Name of the model. Must be the name of the file under model_repo (without file extension)
+                type: str
+                required: True
+
+            checkpoint:
+                description: Name of model checkpoint. If no checkpoint is used, type None.
+                type: str
+                required: True
+
+            detection_threshold:
+                description: threshold that sets minimum confidence to an object to be detected
+                type: str
+                required: True
+
+            resize:
+                description: Comma separated list of 2 dimensions to resize image
+                type: str
+                required: True
+
+            artifact_name:
+                description: Name of the artifact.
+                type: str
+                required: True
+
+            artifact_type:
+                description: Type of the artifact.
+                type: str
+                required: True
+
+            artifact_description:
+                description: A brief description of this artifact.
+                type: str
+                required: True
+
+        command: "python main_inference.py --inference_type {inference_type} --input_folder {input_folder}
+                                 --output_folder {output_folder} --model_name {model_name}
+                                 --checkpoint {checkpoint} --detection_threshold {detection_threshold}
+                                 --resize {resize} --artifact_name {artifact_name}
+                                 --artifact_type {artifact_type} --artifact_description {artifact_description}"

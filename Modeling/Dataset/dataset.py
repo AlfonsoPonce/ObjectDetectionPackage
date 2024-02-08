@@ -37,8 +37,8 @@ class PascalDataset(Dataset):
         self.transforms = transforms
         self.height = height
         self.width = width
-        class_list.insert(0, '__bg__')
-        self.class_list = class_list
+        self.class_list = class_list.copy()
+        self.class_list.insert(0, '__bg__')
         self.image_file_types = ['*.jpg', '*.jpeg', '*.png', '*.ppm']
         self.all_image_paths = []
         self.all_annot_paths = []
@@ -105,6 +105,9 @@ class PascalDataset(Dataset):
             # ymax = right corner y-coordinates
             ymax = int(member.find('bndbox').find('ymax').text)
 
+            if xmax <= xmin:
+                print(image_name)
+
             if self.width != 0 and self.height != 0:
                 # resize the bounding boxes according to the...
                 # ... desired `width`, `height`
@@ -113,7 +116,7 @@ class PascalDataset(Dataset):
                 ymin = (ymin / image_height) * self.height
                 ymax = (ymax / image_height) * self.height
 
-            # print(f'ANTES {xmax}---{xmin}' )
+            #print(f'ANTES {xmax}---{xmin}' )
             if xmax <= xmin:
                 xmax += 0.1
             if ymax <= ymin:

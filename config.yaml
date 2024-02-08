@@ -3,19 +3,40 @@ main:
   # All the intermediate files will be copied to this directory at the end of the run.
   # Set this to null if you are running in prod
   project_name: ObjectDetectionSystem
-  experiment_name: EDA_prerelease
-  steps: EDA
+  experiment_name: DATAGATHER
+  steps: MODELING_MAIN
 
+DATAGATHER:
+  video_sampling: True
+  discard_ratio: 0.7
+  autolabel: True
+  model_name: fasterrcnn_resnet50
+  detection_threshold: 0.9
+  resize: 1920,1080,3
+  input_video_folder: D:\videos
+  root_output_folder: ./sample_output
+  artifact_name: video_gathering
+  artifact_type: folder
+  artifact_description: video_sampling_to_detection
 
 EDA:
   DATASET_ANALYSIS:
-    images_dir: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\images
-    labels_dir: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\labels
+    images_dir: C:\Users\fonso\Documents\sample_output\subset\images
+    labels_dir: C:\Users\fonso\Documents\sample_output\subset\labels
     plots_output_dir: ./generated_images
     report_save_dir: ./report_output
     artifact_name: EDA_REPORT.pdf
     artifact_type: report
     artifact_description: A_brief_summary_of_the_dataset
+
+  VISUALIZER:
+    dataset_format: VOC
+    root_input_dir: C:\Users\fonso\Documents\sample_output\subset
+    root_output_dir:
+    artifact_name: Visualizer
+    artifact_type: visualizer
+    artifact_description: Visualization_of_labels
+
 
 PREPROCESSING:
   class_list: goalkeeper,player,ball,referee
@@ -40,12 +61,23 @@ PREPROCESSING:
     artifact_type: augmentations_result
     artifact_description: Augmentation_file_used_And_result
 
+  EXTRA_PREPROCESSING:
+    type: erase_images_with_empty_labels
+    image_directory: C:\Users\fonso\Documents\sample_output\subset\images
+    labels_directory: C:\Users\fonso\Documents\sample_output\subset\labels
+    labels_to_maintain: ball
+    current_labels_list: ball
+    target_labels_list: ball
+    artifact_name: extra_preprocessing
+    artifact_type: folder
+    artifact_description: removed_extra_labels
+
 MODELING:
   dataset_format: VOC
-  class_list: goalkeeper,player,ball,referee
-  images_dir: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\images
-  labels_dir: C:\Users\fonso\Documents\Data\FootballerDetection\raw_data\labels
-  output_dir: ./model_output
+  class_list: ball
+  images_dir: C:\Users\fonso\Documents\tiles\images
+  labels_dir: C:\Users\fonso\Documents\tiles\labels
+  output_dir: ./model_output_tiled
   train_split: 0.8
   model: fasterrcnn_resnet50
   train_config:
@@ -55,16 +87,38 @@ MODELING:
       params:
         lr: 1e-5
     scheduler:
-      name: ExponentialLR
+      name: CosineAnnealingWarmRestarts
       params:
-        gamma: 1e-1
-    epochs: 2
+        T_0: 50
+    epochs: 20
   artifact_name: modeling
   artifact_type: torch_model
   artifact_description: Model_Produced
 
+  MODEL_SELECTION:
+    model_list: fasterrcnn_resnet50,fcos_resnet_50fpn
+    metric_criteria: MAP
+    K: 5
+    selection_method: K_Crossval
+    hypothesis_test: PAIRWISE_TTEST
+    significance_level: 0.05
+    artifact_name: model_selection
+    artifact_type: torch_model
+    artifact_description: Model_Produced
 
+  INFERENCE:
+    inference_type: dataset
+    input_folder: C:\Users\fonso\Documents\sample_output\images
+    output_folder: C:\Users\fonso\Documents\model_tiled_inference
+    model_name: fasterrcnn_resnet50
+    checkpoint: C:\Users\fonso\Documents\ObjectDetectionPackage\model_output_tiled\BEST_FasterRCNN.pth
+    detection_threshold: 0.95
+    resize: 1280,720
+    artifact_name: inference_data
+    artifact_type: inference
+    artifact_description: dataset_to_infere
 
+#C:\Users\fonso\Documents\sample_output\images
 
 
 

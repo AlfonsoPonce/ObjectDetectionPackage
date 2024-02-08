@@ -175,6 +175,7 @@ def run(args):
         logging.warning("Following happened during document saving:")
         logging.error(str(err))
 
+
     artifact = wandb.Artifact(
         name=args.artifact_name,
         type=args.artifact_type,

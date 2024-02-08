@@ -1,27 +1,28 @@
 import torchvision
 import torch
 import math
-from torchvision.models.detection.fcos import FCOSHead
+from torchvision.models.detection.fcos import FCOSClassificationHead
+from functools import partial
 
 
-def create_model(num_classes):
+def create_model(num_classes, new_head):
     # load Faster RCNN pre-trained model
     model = torchvision.models.detection.fcos_resnet50_fpn(pretrained=True)
-    num_anchors = model.head.classification_head.num_anchors
-    out_channels = model.head.classification_head.conv[9].out_channels
-    model.head.classification_head.num_classes = num_classes
+    if new_head:
+        num_anchors = model.head.classification_head.num_anchors
 
-    cls_logits = torch.nn.Conv2d(
-        out_channels,
-        num_anchors *
-        num_classes,
-        kernel_size=3,
-        stride=1,
-        padding=1)
-    torch.nn.init.normal_(cls_logits.weight, std=0.01)  # as per pytorch code
-    # as per pytorcch code
-    torch.nn.init.constant_(cls_logits.bias, -math.log((1 - 0.01) / 0.01))
-    # assign cls head to model
-    model.head.classification_head.cls_logits = cls_logits
+        model.head.classification_head = FCOSClassificationHead(
+            in_channels=256,
+            num_anchors=num_anchors,
+            num_classes=num_classes,
+            norm_layer=partial(torch.nn.GroupNorm, 32)
+        )
+        model.transform.min_size = (640,)
+        model.transform.max_size = 640
+        for param in model.parameters():
+            param.requires_grad = True
 
     return model
+
+if __name__ == '__main__':
+    create_model(2)

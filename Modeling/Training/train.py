@@ -14,7 +14,7 @@ from .custom_utils import (
     Averager
 )
 import torch
-
+import logging
 
 # if __name__ == '__main__':
 def train(
@@ -33,9 +33,16 @@ def train(
     :param output_dir: Path where trained model will be stored
     :return: Best and last metrics.
     '''
-
-    assert isinstance(train_config_dict['optimizer'], torch.optim.Optimizer)
-    assert isinstance(train_config_dict['epochs'], int)
+    try:
+        assert isinstance(train_config_dict['optimizer'], torch.optim.Optimizer)
+    except AssertionError as err:
+        logging.error("Torch optimizer is not Pytorch object")
+        raise err
+    try:
+        assert isinstance(train_config_dict['epochs'], int)
+    except AssertionError as err:
+        logging.error("Number of epoch is not int")
+        raise err
 
     print(f"Number of training samples: {len(train_loader.dataset)}")
     print(f"Number of validation samples: {len(valid_loader.dataset)}\n")
@@ -115,3 +122,73 @@ def train(
     LAST_MAP = (cocoEval.stats[1].item(), cocoEval.stats[0].item())
 
     return BEST_MAP, LAST_MAP
+
+
+
+if __name__ == '__main__':
+    from ..Model_Zoo.Zoo import Zoo
+
+    model_repo = Zoo(num_classes=1)
+    model = model_repo.get_model('fasterrcnn_resnet50', True)
+
+    optimizer = torch.optim.SGD(model.parameters(),lr=1e-5)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=50)
+    class_list = ['ball']
+    from ..Dataset.dataset import PascalDataset
+    from .custom_utils import collate_fn, get_train_transform, get_valid_transform
+    from torch.utils.data import DataLoader
+
+    images_dir = 'C:\\Users\\fonso\\Documents\\sample_output\\subset\\images'
+    labels_dir = 'C:\\Users\\fonso\\Documents\\sample_output\\subset\\labels'
+
+    images_list = list(Path(images_dir).glob('*'))
+    import random
+    import math
+
+    train_config_dict = {
+        'batch_size': 1,
+        'epochs': 10,
+        'optimizer': optimizer,
+        'scheduler': scheduler
+    }
+    train_split = 0.8
+    train_images_list = random.sample(
+        images_list, math.floor(
+            train_split * len(images_list)))
+    valid_images_list = [
+        test_image for test_image in images_list if test_image not in train_images_list]
+
+    train_labels_list = [
+        Path(
+            labels_dir).joinpath(
+            file.with_suffix('.xml').name) for file in train_images_list]
+    valid_labels_list = [
+        Path(
+            labels_dir).joinpath(
+            file.with_suffix('.xml').name) for file in valid_images_list]
+
+    train_dataset = PascalDataset(
+        train_images_list,
+        train_labels_list,
+        class_list,
+        transforms=get_train_transform())
+    valid_dataset = PascalDataset(
+        valid_images_list,
+        valid_labels_list,
+        class_list,
+        transforms=get_valid_transform())
+
+    train_dataloader = DataLoader(train_dataset,
+                                  batch_size=train_config_dict["batch_size"],
+                                  collate_fn=collate_fn)
+    valid_dataloader = DataLoader(
+        valid_dataset,
+        batch_size=train_config_dict["batch_size"],
+        collate_fn=collate_fn)
+
+
+    train(model= model,
+          train_config_dict=train_config_dict,
+          train_loader=train_dataloader,
+          valid_loader=valid_dataloader,
+          output_dir=Path('./prueba'))
