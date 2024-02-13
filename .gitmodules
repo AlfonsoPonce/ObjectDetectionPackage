@@ -1,3 +1,6 @@
 [submodule "Modeling/Metrics"]
 	path = Modeling/Metrics
 	url = https://github.com/AlfonsoPonce/Metrics.git
+[submodule "Modeling/ModelSelection"]
+	path = Modeling/ModelSelection
+	url = https://github.com/AlfonsoPonce/ModelSelection.git
